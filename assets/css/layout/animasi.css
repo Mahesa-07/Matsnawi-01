@@ -1,0 +1,50 @@
+/* =========================
+✨ Efek sorot bait saat diklik (kelas: .highlighted)
+========================= */
+.bait.highlighted {
+  position: relative;
+  background: rgba(212, 175, 55, 0.15); /* emas lembut */
+  box-shadow: 0 0 7px rgba(212, 175, 55, 0.25);
+  transition: background 0.5s ease, box-shadow 0.5s ease;
+}
+
+/*.bait.highlighted::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(212,175,55,0.325);
+  border-radius: 0px;
+  pointer-events: none;
+  animation: pulseGlow 1.6s ease-out;
+}*/
+
+@keyframes pulseGlow {
+  0% {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+/* =========================
+🔍 Highlight hasil pencarian
+========================= */
+.highlight {
+  background: rgba(212, 175, 55, 0.35); /* warna emas lembut */
+  color: var(--text, #fff);
+  border-radius: 3px;
+  padding: 0 2px;
+  transition: background 0.3s ease;
+}
+
+body.light .highlight {
+  background: rgba(255, 215, 0, 0.4);
+  color: #000;
+}
