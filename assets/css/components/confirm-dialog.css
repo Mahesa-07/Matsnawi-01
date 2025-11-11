@@ -1,3 +1,6 @@
+/* =========================
+⚠️ Dialog Konfirmasi (final bersih)
+========================= */
 #confirm-dialog {
   position: fixed;
   inset: 0;
@@ -17,7 +20,8 @@
 }
 
 .confirm-box {
-  background: var(--bg);
+  background: var(--bg, #1e1e1e);
+  color: var(--text, #f5f5f5);
   padding: 1rem 1.2rem;
   border-radius: 12px;
   border: 1px solid var(--border);
@@ -34,8 +38,9 @@
 
 .confirm-actions {
   display: flex;
-  justify-content: space-around;
-  gap: 0.6rem;
+  justify-content: center;
+  gap: 0.8rem;
+  margin-top: 1rem;
 }
 
 .btn-cancel,
@@ -46,8 +51,9 @@
   font-weight: 600;
   border: none;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.3s ease, color 0.3s ease;
 }
+
 .btn-cancel {
   background: rgba(255, 255, 255, 0.1);
   color: var(--text);
@@ -55,6 +61,7 @@
 .btn-cancel:hover {
   background: rgba(255, 255, 255, 0.25);
 }
+
 .btn-confirm {
   background: crimson;
   color: #fff;
@@ -63,18 +70,77 @@
   background: #e44;
 }
 
-/* Mobile tweak */
-@media (max-width: 480px) {
-  #edit-panel {
-    width: 94%;
-    padding: 0.9rem 1rem;
-  }
-  #edit-panel textarea {
-    min-height: 80px;
-  }
+/* =========================
+📱 Fix Modal Edit Responsive
+========================= */
+#edit-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1rem 1.2rem;
+  width: 92%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55);
+  z-index: 1500;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+#edit-panel.show {
+  opacity: 1;
+  pointer-events: all;
+  transform: translate(-50%, -50%) scale(1);
 }
 
-/* Tombol di panel */
+#edit-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(5px);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 1400;
+  pointer-events: none;
+}
+#edit-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+#edit-panel h3 {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+}
+#edit-panel label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--accent);
+}
+#edit-panel textarea {
+  width: 100%;
+  min-height: 100px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  resize: vertical;
+  margin-bottom: 1rem;
+}
+
+/* Tombol edit dan konfirmasi seragam */
 .edit-actions,
 .confirm-actions {
   display: flex;
@@ -93,86 +159,21 @@
   cursor: pointer;
   transition: background 0.3s, color 0.3s;
 }
-
 #edit-panel button:first-child,
 .confirm-box .btn-confirm {
-  background: var(--highlight);
+  background: var(--highlight, crimson);
   color: var(--bg);
 }
-
 #edit-panel button:last-child,
 .confirm-box .btn-cancel {
-  background: var(--fade);
+  background: var(--fade, rgba(255,255,255,0.1));
   color: var(--text);
 }
-
 #edit-panel button:hover,
 .confirm-box button:hover {
   opacity: 0.85;
 }
 
-/* =========================
-   RESPONSIVE — khusus HP
-   ========================= */
-@media (min-width: 768px) {
-  header {
-    padding: 0.6rem 1.2rem;
-  }
-
-  .header-center input {
-    width: 280px;
-  }
-
-  .bait .bookmark-btn {
-    font-size: 1.2rem;
-  }
-}
-/* =========================
-🌙 Panel & Aksi Tambahan Matsnawi
-========================= */
-
-/* Tombol aksi pada setiap bait */
-.bait-actions {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.4rem;
-}
-.bait-actions button {
-  background: none;
-  border: 1px solid var(--border);
-  border-radius: 1px;
-  padding: 0.2rem 0.2rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text);
-  transition: background 0.3s, transform 0.2s;
-}
-.bait-actions button:hover {
-  background: rgba(255,255,255,0.08);
-  transform: translateY(-1px);
-}
-.bait-actions svg {
-  pointer-events: none;
-}
-
-/* Deskripsi bait */
-/* Deskripsi bait */
-.bait-desc {
-  margin-top: 0.2rem;
-  padding: 0.3rem 0.4rem;
-  border-left: 1px solid var(--accent);
-  background: rgba(129, 128, 128, 0.11);
-  border-radius: 1px;
-  line-height: 1;
-  font-size: 0.8rem;
-  font-style: italic; /* 🔸 huruf miring elegan */
-  color: var(--muted); /* opsional: warna sedikit lembut */
-}
-.bait-desc.hidden {
-  display: none;
-}
 /* =========================
 📘 Panel Bookmark
 ========================= */
@@ -228,206 +229,70 @@
 .bookmark-item:hover {
   background: rgba(255,255,255,0.1);
 }
+
 /* =========================
-📱 Fix Modal Edit Responsive
+🌙 Panel & Aksi Tambahan Matsnawi
 ========================= */
-#edit-panel {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(0.9);
-  background: var(--bg);
-  color: var(--text);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 1rem 1.2rem;
-  width: 92%;
-  max-width: 520px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55);
-  z-index: 1500; /* ⬆️ lebih tinggi dari overlay manapun */
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.35s ease, transform 0.35s ease;
-}
-
-/* Saat aktif */
-#edit-panel.show {
-  opacity: 1;
-  pointer-events: all;
-  transform: translate(-50%, -50%) scale(1);
-}
-
-/* backdrop terpisah agar tidak menutup panel */
-#edit-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(5px);
-  opacity: 0;
-  transition: opacity 0.3s;
-  z-index: 1400;
-  pointer-events: none;
-}
-#edit-overlay.show {
-  opacity: 1;
-  pointer-events: all;
-}
-
-/* isi panel tetap sama */
-#edit-panel h3 {
-  margin: 0 0 1rem;
-  font-size: 1.2rem;
-  text-align: center;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 0.4rem;
-}
-#edit-panel label {
-  display: block;
-  margin-bottom: 0.3rem;
-  font-weight: 600;
-  font-size: 0.9rem;
-  color: var(--accent);
-}
-#edit-panel textarea {
-  width: 100%;
-  min-height: 100px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 0.6rem;
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text);
-  resize: vertical;
-  margin-bottom: 1rem;
-}
-.edit-actions {
+.bait-actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 0.6rem;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
 }
-.edit-actions button {
-  flex: 1;
-  padding: 0.5rem 0.8rem;
-  border-radius: 8px;
-  border: none;
+.bait-actions button {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 1px;
+  padding: 0.2rem 0.2rem;
   cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s;
-}
-#saveEditBtn {
-  background: var(--accent);
-  color: var(--bg);
-}
-#cancelEditBtn {
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text);
-}
-#saveEditBtn:hover {
-  background: #fff;
-  color: #000;
-}
-#cancelEditBtn:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
-/* =========================
-⚠️ Dialog Konfirmasi
-========================= */
-#confirm-dialog {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1400;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s;
-}
-#confirm-dialog.show {
-  opacity: 1;
-  pointer-events: all;
-}
-.confirm-box {
-  background: var(--bg);
-  padding: 1rem 1.2rem;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  text-align: center;
-  width: 260px;
-}
-.confirm-actions {
-  margin-top: 1rem;
-  display: flex;
-  justify-content: space-around;
-}
-.btn-cancel,
-.btn-confirm {
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  border: none;
-}
-.btn-cancel {
-  background: rgba(255,255,255,0.1);
   color: var(--text);
+  transition: background 0.3s, transform 0.2s;
 }
-.btn-confirm {
-  background: crimson;
-  color: #fff;
+.bait-actions button:hover {
+  background: rgba(255,255,255,0.08);
+  transform: translateY(-1px);
 }
-.btn-cancel:hover { background: rgba(255,255,255,0.2); }
-.btn-confirm:hover { background: #e44; }
-
-.confirm-dialog {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
+.bait-actions svg {
+  pointer-events: none;
+}
+.bait-desc {
+  margin-top: 0.2rem;
+  padding: 0.3rem 0.4rem;
+  border-left: 1px solid var(--accent);
+  background: rgba(129, 128, 128, 0.11);
+  border-radius: 1px;
+  line-height: 1;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--muted);
+}
+.bait-desc.hidden {
   display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-  backdrop-filter: blur(3px);
 }
 
-.confirm-dialog.show {
-  display: flex;
+/* =========================
+📱 Responsive
+========================= */
+@media (max-width: 480px) {
+  #edit-panel {
+    width: 94%;
+    padding: 0.9rem 1rem;
+  }
+  #edit-panel textarea {
+    min-height: 80px;
+  }
 }
 
-.confirm-box {
-  background: var(--bg, #1e1e1e);
-  color: var(--text, #f5f5f5);
-  padding: 1.5em;
-  border-radius: 1em;
-  text-align: center;
-  width: 90%;
-  max-width: 300px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-}
-
-.confirm-actions {
-  margin-top: 1em;
-  display: flex;
-  justify-content: center;
-  gap: 1em;
-}
-
-.btn-cancel, .btn-confirm {
-  padding: 0.5em 1.2em;
-  border-radius: 0.5em;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.btn-cancel {
-  background: #666;
-  color: white;
-}
-
-.btn-confirm {
-  background: #c0392b;
-  color: white;
+@media (min-width: 768px) {
+  header {
+    padding: 0.6rem 1.2rem;
+  }
+  .header-center input {
+    width: 280px;
+  }
+  .bait .bookmark-btn {
+    font-size: 1.2rem;
+  }
 }
