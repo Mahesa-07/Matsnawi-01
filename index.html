@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matsnawi Jilid 1</title>
+  <link rel="stylesheet" href="./assets/css/main.css" />
+
+  <!-- 🔹 SVG Sprite Icons -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <!-- 📑 Bookmark -->
+    <symbol id="icon-bookmark" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="1.2"
+            stroke-linecap="round" stroke-linejoin="round"
+            d="M6.5 3h11v17l-5.5-3-5.5 3z"/>
+    </symbol>
+
+    <symbol id="icon-bookmark-filled" viewBox="0 0 24 24">
+      <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"
+            fill="currentColor"/>
+    </symbol>
+
+    <!-- 💾 Save -->
+    <symbol id="icon-save" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="1.3"
+            stroke-linecap="round" stroke-linejoin="round"
+            d="M5 3h14l2 2v16H3V3h2zm7 0v8h4"/>
+    </symbol>
+
+    <!-- ❌ Cancel -->
+    <symbol id="icon-cancel" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="1.3"
+            stroke-linecap="round" stroke-linejoin="round"
+            d="M18 6L6 18M6 6l12 12"/>
+    </symbol>
+
+    <!-- 📤 Export -->
+    <symbol id="icon-export" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="1.3"
+            stroke-linecap="round" stroke-linejoin="round"
+            d="M12 5v14m0-14l4 4m-4-4l-4 4M4 19h16"/>
+    </symbol>
+
+    <!-- 📥 Import -->
+    <symbol id="icon-import" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="1.3"
+            stroke-linecap="round" stroke-linejoin="round"
+            d="M12 19V5m0 14l4-4m-4 4l-4-4M4 5h16"/>
+    </symbol>
+
+    <!-- 🔄 Reset -->
+    <symbol id="icon-reset" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="1.3"
+            stroke-linecap="round" stroke-linejoin="round"
+            d="M4.93 4.93A10 10 0 1 1 4 12h3m0-8V4H4"/>
+    </symbol>
+
+    <!-- ✏️ Edit -->
+    <symbol id="icon-edit" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="1.2"
+            stroke-linecap="round" stroke-linejoin="round"
+            d="M3 17.25V21h3.75l11-11.03a2.12 2.12 0 0 0-3-3L3 17.25z"/>
+    </symbol>
+
+    <!-- 🗒️ Deskripsi -->
+    <symbol id="icon-open" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="1.2"
+            stroke-linecap="round" stroke-linejoin="round"
+            d="M4 5h16v14H4V5zm8 4l4 3-4 3"/>
+    </symbol>
+
+    <!-- 🌗 Tema -->
+    <symbol id="icon-sun" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.2" fill="none"/>
+      <path stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
+            d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.5 6.5l-1.5-1.5M7 7L5.5 5.5m12 0L17.5 7M6.5 17.5L5 19"/>
+    </symbol>
+
+    <symbol id="icon-moon" viewBox="0 0 24 24">
+      <path fill="none" stroke="currentColor" stroke-width="1.2"
+            stroke-linecap="round" stroke-linejoin="round"
+            d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </symbol>
+  </svg>
+</head>
+
+<body>
+  <!-- =========================
+       🔹 HEADER
+  ========================= -->
+  <header>
+    <div class="left-header">
+      <button id="menuToggle" class="menu-btn" aria-label="Buka Sidebar">☰</button>
+      <h1>Matsnawi-01</h1>
+    </div>
+
+    <div class="header-center">
+      <button id="searchBtn" class="icon-btn" title="Cari Bait">
+        <svg width="22" height="22" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.2" fill="none"/>
+          <line x1="16.65" y1="16.65" x2="21" y2="21"
+                stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="header-actions">
+      <button id="bookmark-toggle" class="icon-btn" title="Lihat Bookmark">
+        <svg width="24" height="24"><use href="#icon-bookmark"></use></svg>
+      </button>
+
+      <button id="toggleLangBtn" title="Ganti Bahasa">🇮🇩</button>
+
+      <button id="themeToggle" title="Ganti Tema" class="icon-btn">
+        <svg width="22" height="22" viewBox="0 0 24 24">
+          <use href="#icon-moon"></use>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- =========================
+       📚 SIDEBAR
+  ========================= -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <h2>Daftar Bab</h2>
+    </div>
+    <div id="baitList" class="sidebar-list"></div>
+  </aside>
+
+  <!-- =========================
+       📖 KONTEN UTAMA
+  ========================= -->
+  <main id="content">
+    <div id="baitContainer" class="bait-container"></div>
+  </main>
+
+  <!-- =========================
+       ✏️ PANEL EDIT
+  ========================= -->
+  <div id="edit-overlay"></div>
+  <div id="edit-panel" class="edit-panel" aria-hidden="true">
+    <h3>Edit Bait</h3>
+
+    <label for="edit-inggris">Teks Inggris:</label>
+    <textarea id="edit-inggris" placeholder="Masukkan teks asli..."></textarea>
+
+    <label for="edit-indo">Terjemahan Indonesia:</label>
+    <textarea id="edit-indo" placeholder="Masukkan terjemahan..."></textarea>
+
+    <!-- Tombol utama -->
+    <div class="edit-actions">
+      <button id="saveEditBtn" class="btn-primary" title="Simpan Perubahan">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <use href="#icon-save"></use>
+        </svg>
+        <span>Simpan</span>
+      </button>
+
+      <button id="cancelEditBtn" class="btn-secondary" title="Batal Edit">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <use href="#icon-cancel"></use>
+        </svg>
+        <span>Batal</span>
+      </button>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- Tombol alat tambahan -->
+    <div class="edit-tools">
+      <button id="exportEditsBtn" class="btn-neutral" title="Ekspor Edit">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <use href="#icon-export"></use>
+        </svg>
+        <span>Ekspor</span>
+      </button>
+
+      <label for="importEditsBtn" class="btn-neutral import-label" title="Impor Edit">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <use href="#icon-import"></use>
+        </svg>
+        <span>Impor</span>
+      </label>
+      <input type="file" id="importEditsBtn" accept="application/json" hidden />
+
+      <button id="resetEditsBtn" class="btn-danger" title="Reset Semua Edit">
+        <svg width="18" height="18" viewBox="0 0 24 24">
+          <use href="#icon-reset"></use>
+        </svg>
+        <span>Reset</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- =========================
+       📑 PANEL BOOKMARK
+  ========================= -->
+  <div id="bookmark-overlay"></div>
+  <div id="bookmark-panel" class="bookmark-panel" aria-hidden="true">
+    <h3>📑 Daftar Bookmark</h3>
+    <div id="bookmark-list"></div>
+  </div>
+
+  <!-- =========================
+       ⚠️ DIALOG KONFIRMASI
+  ========================= -->
+  <div id="confirm-dialog" class="confirm-dialog" aria-hidden="true">
+    <div class="confirm-box">
+      <p>Hapus bookmark ini?</p>
+      <div class="confirm-actions">
+        <button id="cancelRemove" class="btn-cancel">Tidak</button>
+        <button id="confirmRemove" class="btn-confirm">Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================
+       🔍 SEARCH OVERLAY
+  ========================= -->
+  <div id="searchOverlay" class="search-overlay">
+    <div class="search-bar">
+      <input type="text" id="searchField" placeholder="Ketik kata kunci..." />
+      <button id="closeSearch" title="Tutup">✖</button>
+    </div>
+    <div id="searchResults" class="search-results"></div>
+  </div>
+
+  <!-- =========================
+       ⚡ SCRIPT UTAMA
+  ========================= -->
+  <script type="module" src="./assets/js/main.js"></script>
+</body>
+</html>
