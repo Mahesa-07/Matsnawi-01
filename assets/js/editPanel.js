@@ -1,10 +1,9 @@
-// ✏️ Edit Panel — Versi Lengkap + Ekspor/Impor/Reset dengan Timestamp
+// ✏️ Edit Panel — Hanya Bahasa Indonesia + Ekspor/Impor/Reset
 import { renderBaits } from "./subbab.js";
 import { showToast } from "./toast.js";
 import { setGlobals, getGlobals } from "./utils.js";
 
 const editPanel = document.getElementById("edit-panel");
-const editInggris = document.getElementById("edit-inggris");
 const editIndo = document.getElementById("edit-indo");
 const saveEditBtn = document.getElementById("saveEditBtn");
 const cancelEditBtn = document.getElementById("cancelEditBtn");
@@ -16,10 +15,9 @@ const resetBtn  = document.getElementById("resetEditsBtn");
 // ===============================
 // 🔹 Buka Panel Edit
 // ===============================
-export function openEditPanel(baitId, engText = "", indoText = "") {
-  editInggris.value = engText;
+export function openEditPanel(baitId, indoText = "") {
   editIndo.value = indoText;
-  setGlobals({ editingBait: { id: baitId, inggris: engText, indo: indoText } });
+  setGlobals({ editingBait: { id: baitId, indo: indoText } });
 
   editPanel.setAttribute("aria-hidden", "false");
   editPanel.classList.add("show");
@@ -42,17 +40,15 @@ saveEditBtn?.addEventListener("click", () => {
   const editing = globals.editingBait;
   if (!editing) return;
 
-  const newEng = editInggris.value.trim();
   const newIndo = editIndo.value.trim();
 
   const bait = globals.baits.find((b) => b.id === editing.id);
   if (bait) {
-    bait.inggris = newEng;
     bait.indo = newIndo;
   }
 
   const edits = JSON.parse(localStorage.getItem("baitEdits") || "{}");
-  edits[editing.id] = { inggris: newEng, indo: newIndo };
+  edits[editing.id] = { indo: newIndo };
   localStorage.setItem("baitEdits", JSON.stringify(edits));
 
   renderBaits();
@@ -72,7 +68,6 @@ export function applySavedEdits(baits) {
   const edits = JSON.parse(localStorage.getItem("baitEdits") || "{}");
   baits.forEach((b) => {
     if (edits[b.id]) {
-      b.inggris = edits[b.id].inggris;
       b.indo = edits[b.id].indo;
     }
   });
@@ -88,7 +83,6 @@ exportBtn?.addEventListener("click", () => {
     return;
   }
 
-  // 🔸 Buat nama file otomatis
   const now = new Date();
   const pad = (n) => String(n).padStart(2, "0");
   const timestamp = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}_${pad(now.getHours())}-${pad(now.getMinutes())}`;
