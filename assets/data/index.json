@@ -44,7 +44,12 @@
           "title": "Sang Tabib meminta Raja untuk menyendiri bersama si gadis budak, demi menyingkap penyakitnya.",
           "file": "./assets/data/bab2-sub6.json",
           "description": ""
-          }
+          },
+     {
+          "title": "Kisah bagaimana Sang Wali (Tabib), setelah menyingkap (penyebab) penyakit itu, Memaparkannya di hadapan Sang Raja.",
+          "file": "./assets/data/bab2-sub7.json",
+          "description": ""
+}
       ]
     }
   ]
