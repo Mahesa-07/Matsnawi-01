@@ -1,5 +1,5 @@
 // -*- coding: utf-8 -*-
-// 📚 sidebar.js — Bab → Subbab → Bait Preview (ESModule Final)
+// 📚 sidebar.js — Bab → Subbab → Bait Preview (ESModule Final + Flash Sidebar)
 
 import { loadSubbab } from "./subbab.js";
 import { showToast } from "./toast.js";
@@ -7,6 +7,19 @@ import { showToast } from "./toast.js";
 const sidebar = document.getElementById("sidebar");
 const menuToggle = document.getElementById("menuToggle");
 const baitList = document.getElementById("baitList");
+
+// =============================
+// 🔹 Efek flash sidebar saat pertama kali load
+// =============================
+function flashSidebar(duration = 800) {
+  sidebar.classList.add("show");
+  menuToggle.textContent = "✖";
+
+  setTimeout(() => {
+    sidebar.classList.remove("show");
+    menuToggle.textContent = "☰";
+  }, duration);
+}
 
 // =============================
 // 🔹 Membangun Sidebar Utama
@@ -77,6 +90,13 @@ export async function buildSidebar() {
       babItem.appendChild(subbabList);
       baitList.appendChild(babItem);
     }
+
+    // 🔹 Flash sidebar hanya sekali
+    if (!window._sidebarFlashed) {
+      window._sidebarFlashed = true;
+      flashSidebar(800); // durasi dalam ms
+    }
+
   } catch (err) {
     console.error("❌ buildSidebar error:", err);
     baitList.innerHTML = "<li>⚠️ Gagal memuat daftar Bab</li>";
@@ -103,7 +123,6 @@ async function loadSubbabPreview(file, subList, bab, subIndex, sub) {
       )
       .join("");
 
-    // Klik bait di preview → buka subbab & scroll ke bait
     subList.querySelectorAll(".bait-item").forEach((li) => {
       li.addEventListener("click", async () => {
         await loadSubbab(sub.file, bab.bab, subIndex, sub.title);
@@ -146,12 +165,13 @@ document.addEventListener("click", (e) => {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && sidebar.classList.contains("show")) closeSidebar();
 });
-  // 4️⃣ Efek klik untuk buka/tutup subbab (expand/collapse)
-  document.addEventListener("click", (e) => {
-    if (e.target.classList.contains("subbab-title")) {
-      const sublist = e.target.nextElementSibling;
-      if (sublist && sublist.classList.contains("bait-sublist")) {
-        sublist.classList.toggle("show");
-      }
+
+// 4️⃣ Efek klik untuk buka/tutup subbab (expand/collapse)
+document.addEventListener("click", (e) => {
+  if (e.target.classList.contains("subbab-title")) {
+    const sublist = e.target.nextElementSibling;
+    if (sublist && sublist.classList.contains("bait-sublist")) {
+      sublist.classList.toggle("show");
     }
-  });
+  }
+});
