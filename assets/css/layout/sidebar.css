@@ -19,13 +19,14 @@
   backdrop-filter: blur(16px) saturate(160%);
   border-right: 1px solid var(--border);
   transform: translateX(-100%);
-  transition: transform var(--transition-fast);
+ transition: transform 0.5s cubic-bezier(0.25, 1, 0.3, 1);
   z-index: 200;
   overflow: hidden; /* scroll hanya di list */
+  
 }
 
 .sidebar.show {
-  transform: translateX(0);
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.35);
 }
 
 /* Header */
