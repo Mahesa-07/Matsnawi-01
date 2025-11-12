@@ -1,177 +1,314 @@
-// -*- coding: utf-8 -*-
-// 📚 sidebar.js — Bab → Subbab → Bait Preview (ESModule Final + Flash Sidebar)
-
-import { loadSubbab } from "./subbab.js";
-import { showToast } from "./toast.js";
-
-const sidebar = document.getElementById("sidebar");
-const menuToggle = document.getElementById("menuToggle");
-const baitList = document.getElementById("baitList");
-
-// =============================
-// 🔹 Efek flash sidebar saat pertama kali load
-// =============================
-function flashSidebar(duration = 800) {
-  sidebar.classList.add("show");
-  menuToggle.textContent = "✖";
-
-  setTimeout(() => {
-    sidebar.classList.remove("show");
-    menuToggle.textContent = "☰";
-  }, duration);
+/* =========================
+📚 SIDEBAR — Kaca Buram & Navigasi 3 Tingkat (Modular Matsnawi)
+========================= */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 90%;
+  max-width: 365px;
+  height: 100%;
+  background: var(--transparant);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border-right: 1px solid var(--border);
+  transform: translateX(-100%);
+  transition: transform var(--transition-fast), backdrop-filter var(--transition-fast);
+  z-index: 200;
+  overflow-y: auto;
+  padding-bottom: 3rem;
+  box-shadow: 4px 0 20px var(--shadow);
 }
 
-// =============================
-// 🔹 Membangun Sidebar Utama
-// =============================
-export async function buildSidebar() {
-  if (!baitList) {
-    console.warn("⚠️ Elemen #baitList tidak ditemukan di DOM.");
-    return;
+
+/* Saat sidebar dibuka */
+.sidebar.show {
+  transform: translateX(0);
+}
+#sidebar {
+  transition: transform 0.4s ease;
+  transform: translateX(-100%); /* tersembunyi default */
+}
+
+#sidebar.show {
+  transform: translateX(0); /* muncul */
+}
+
+/* =========================
+📗 HEADER SIDEBAR
+========================= */
+.sidebar-header {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid var(--border);
+  font-weight: 500;
+  font-size: 0.7rem;
+  letter-spacing: 0.4px;
+  color: var(--sub-judul);
+  text-transform: uppercase;
+  opacity: 0.88;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* =========================
+📘 STRUKTUR BAB / SUBBAB / BAIT
+========================= */
+
+/* Bab */
+.sidebar-bab {
+  position: relative;
+  margin-bottom: 0.6rem;
+  padding-left: 0.4rem;
+}
+
+.bab-title {
+  cursor: pointer;
+  padding: 0.8rem 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--sub-judul);
+  user-select: none;
+  border-bottom: 1px solid var(--fade);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.bab-title:hover {
+  background: var(--fade);
+  color: var(--highlight);
+}
+.bab-title .arrow {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  transition: transform var(--transition-slow);
+}
+
+/* Subbab */
+.subbab-list {
+  margin-left: 0.6rem;
+  padding-left: 0.3rem;
+  border-left: 1.5px solid var(--fade);
+  transition: all var(--transition-fast);
+  overflow: hidden;
+}
+
+.subbab-title {
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  color: var(--text);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.subbab-title:hover {
+  background: var(--fade);
+  color: var(--accent);
+}
+.subbab-title::before {
+  content: "•";
+  color: var(--accent);
+  font-weight: bold;
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+  opacity: 0.8;
+  transform: translateY(-1px);
+}
+.subbab-title:hover::before {
+  opacity: 1;
+  transform: scale(1.2);
+  transition: all var(--transition-fast);
+}
+
+/* Daftar bait */
+/* ✨ Efek animasi buka/tutup daftar bait */
+.bait-sublist {
+  margin-left: 0.6rem;
+  padding-left: 0.6rem;
+  border-left: 1.5px dashed var(--fade);
+  font-size: 0.7rem;
+  overflow: hidden;
+  max-height: 0;               /* tersembunyi saat awal */
+  opacity: 0;                  /* transparan saat tertutup */
+  transform: translateY(-4px); /* sedikit naik agar animasi smooth */
+  transition:
+    max-height 0.35s ease,
+    opacity 0.25s ease,
+    transform 0.35s ease;
+}
+
+/* Saat dibuka (class .show ditambahkan lewat JS) */
+.bait-sublist.show {
+  max-height: 500px;     /* cukup besar agar semua bait muat */
+  opacity: 1;
+  transform: translateY(0);
+}
+.bait-item {
+  padding: 0.3rem 0.5rem;
+  margin: 0.2rem 0;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.bait-item::before {
+  content: "◦";
+  color: var(--highlight);
+  margin-right: 0.4rem;
+  font-size: 0.7rem;
+  opacity: 0.7;
+}
+.bait-item:hover {
+  background: var(--fade);
+  color: var(--accent);
+}
+.bait-item:hover::before {
+  opacity: 1;
+  transform: scale(1.3);
+  transition: all var(--transition-fast);
+}
+
+/* =========================
+🧭 Scrollbar — halus & elegan
+========================= */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+}
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* =========================
+🌗 Tema terang (Light Mode)
+========================= */
+body.light .sidebar {
+  background: rgba(255, 255, 255, 0.8);
+  border-right: 1px solid var(--border);
+  box-shadow: 4px 0 16px rgba(0, 0, 0, 0.1);
+}
+body.light .bab-title:hover,
+body.light .subbab-title:hover,
+body.light .bait-item:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+body.light .subbab-list,
+body.light .bait-sublist {
+  border-left-color: rgba(0, 0, 0, 0.08);
+}
+body.light .subbab-title::before,
+body.light .bait-item::before {
+  color: var(--accent);
+}
+
+.sidebar {
+  background: var(--panel);
+  color: var(--text);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Tombol bagian atas */
+.header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Tombol ikon (Bookmark & Tema) */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 0px solid rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  font-size: 0.85rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.icon-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.icon-btn svg {
+  flex-shrink: 0;
+}
+
+/* Tombol teks (Ubah Bahasa) */
+.text-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  font-size: 0.85rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.text-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Garis pembatas sebelum Daftar Bab */
+.sidebar-divider {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--accent),
+    transparent
+  );
+  margin-top: 0.5rem;
+}
+
+/* Judul "Daftar Bab" */
+.sidebar-title {
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--accent);
+  margin-top: 0.5rem;
+  letter-spacing: 0.5px;
+}
+
+/* Daftar bab di bawahnya */
+.sidebar-list {
+  margin-top: 1rem;
+  overflow-y: auto;
+  flex: 1;
+}
+/* Sidebar default tertutup di kiri */
+.sidebar {
+  transform: translateX(-260px);
+  transition: transform 0.3s ease;
+  will-change: transform;
+}
+
+.sidebar.open {
+  transform: translateX(0);
+}
+
+/* Saat geser aktif (biar smooth & responsif) */
+body,
+.sidebar {
+  touch-action: pan-y;
   }
-
-  baitList.innerHTML = "";
-
-  try {
-    const res = await fetch("./assets/data/index.json");
-    if (!res.ok) throw new Error("Gagal memuat index.json");
-    const index = await res.json();
-
-    for (const bab of index.files) {
-      const babItem = document.createElement("div");
-      babItem.className = "sidebar-bab";
-      babItem.innerHTML = `<div class="bab-title" data-bab="${bab.bab}">${bab.title}</div>`;
-
-      const subbabList = document.createElement("ul");
-      subbabList.className = "subbab-list hidden";
-
-      // 🔸 Loop setiap subbab
-      for (let subIndex = 0; subIndex < bab.subbabs.length; subIndex++) {
-        const sub = bab.subbabs[subIndex];
-
-        const subItem = document.createElement("li");
-        subItem.className = "subbab-item";
-        subItem.innerHTML = `
-          <div class="subbab-title" data-file="${sub.file}">
-            ${sub.title}
-            ${sub.description ? `<span class="desc">${sub.description}</span>` : ""}
-          </div>
-          <ul class="bait-sublist hidden"></ul>
-        `;
-        subbabList.appendChild(subItem);
-
-        const subTitle = subItem.querySelector(".subbab-title");
-        const baitSublist = subItem.querySelector(".bait-sublist");
-
-        // Klik sekali → tampilkan preview bait
-        subTitle.addEventListener("click", async () => {
-          const visible = !baitSublist.classList.contains("hidden");
-          document.querySelectorAll(".bait-sublist").forEach((l) => l.classList.add("hidden"));
-          if (!visible) {
-            await loadSubbabPreview(sub.file, baitSublist, bab, subIndex, sub);
-            baitSublist.classList.remove("hidden");
-          } else baitSublist.classList.add("hidden");
-        });
-
-        // Klik dua kali → langsung buka subbab
-        subTitle.addEventListener("dblclick", () => {
-          loadSubbab(sub.file, bab.bab, subIndex, sub.title);
-          closeSidebar();
-        });
-      }
-
-      const babTitle = babItem.querySelector(".bab-title");
-      babTitle.addEventListener("click", () => {
-        const visible = !subbabList.classList.contains("hidden");
-        document.querySelectorAll(".subbab-list").forEach((l) => l.classList.add("hidden"));
-        if (!visible) subbabList.classList.remove("hidden");
-      });
-
-      babItem.appendChild(subbabList);
-      baitList.appendChild(babItem);
-    }
-
-    // 🔹 Flash sidebar hanya sekali
-    if (!window._sidebarFlashed) {
-      window._sidebarFlashed = true;
-      flashSidebar(800); // durasi dalam ms
-    }
-
-  } catch (err) {
-    console.error("❌ buildSidebar error:", err);
-    baitList.innerHTML = "<li>⚠️ Gagal memuat daftar Bab</li>";
-    showToast("Tidak bisa memuat daftar Bab.");
-  }
-}
-
-// =============================
-// 🔹 Memuat Preview Bait per Subbab
-// =============================
-async function loadSubbabPreview(file, subList, bab, subIndex, sub) {
-  try {
-    const res = await fetch(file);
-    if (!res.ok) throw new Error(`Gagal memuat ${file}`);
-    const data = await res.json();
-
-    subList.innerHTML = data
-      .map(
-        (b) => `
-        <li class="bait-item" data-id="${b.id}">
-          <span class="bait-number">${b.id}.</span>
-          <span class="bait-text">${(b.indo || "").slice(0, 30)}...</span>
-        </li>`
-      )
-      .join("");
-
-    subList.querySelectorAll(".bait-item").forEach((li) => {
-      li.addEventListener("click", async () => {
-        await loadSubbab(sub.file, bab.bab, subIndex, sub.title);
-        const id = Number(li.dataset.id);
-        const el = document.querySelector(`.bait[data-id='${id}']`);
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-        closeSidebar();
-      });
-    });
-  } catch (err) {
-    console.error("❌ loadSubbabPreview error:", err);
-    subList.innerHTML = "<li>⚠️ Gagal memuat bait</li>";
-  }
-}
-
-// =============================
-// 🔹 Kontrol Sidebar
-// =============================
-export function openSidebar() {
-  sidebar.classList.add("show");
-  menuToggle.textContent = "✖";
-}
-export function closeSidebar() {
-  sidebar.classList.remove("show");
-  menuToggle.textContent = "☰";
-}
-
-// =============================
-// 🔹 Event Listener Global
-// =============================
-menuToggle?.addEventListener("click", (e) => {
-  e.stopPropagation();
-  sidebar.classList.contains("show") ? closeSidebar() : openSidebar();
-});
-
-document.addEventListener("click", (e) => {
-  if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) closeSidebar();
-});
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && sidebar.classList.contains("show")) closeSidebar();
-});
-
-// 4️⃣ Efek klik untuk buka/tutup subbab (expand/collapse)
-document.addEventListener("click", (e) => {
-  if (e.target.classList.contains("subbab-title")) {
-    const sublist = e.target.nextElementSibling;
-    if (sublist && sublist.classList.contains("bait-sublist")) {
-      sublist.classList.toggle("show");
-    }
-  }
-});
