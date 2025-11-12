@@ -1,5 +1,6 @@
 // -*- coding: utf-8 -*-
-// 🎯 baitActions.js — Bookmark, Edit, Deskripsi (ESModule Final)
+// 🎯 baitActions.js — Bookmark, Edit, Deskripsi (Final v3.3)
+// ✅ Terhubung dengan editPanel.js (sinkron)
 
 import { showToast } from "./toast.js";
 import { openEditPanel } from "./editPanel.js";
@@ -17,28 +18,28 @@ export function addBaitListeners() {
     const btnEdit = bait.querySelector(".btn-edit");
     const btnDesc = bait.querySelector(".btn-desc");
 
-    // 🔸 Tandai tombol aktif jika sudah di-bookmark
+    // 🔸 Bookmark aktif
     if (bookmarks.includes(baitId)) {
       btnBookmark?.classList.add("active");
       btnBookmark.innerHTML = `
         <svg width="20" height="20" viewBox="0 0 24 24">
           <use href="#icon-bookmark-filled"></use>
-        </svg>
-      `;
+        </svg>`;
     } else {
       btnBookmark?.classList.remove("active");
       btnBookmark.innerHTML = `
         <svg width="20" height="20" viewBox="0 0 24 24">
           <use href="#icon-bookmark"></use>
-        </svg>
-      `;
+        </svg>`;
     }
 
     // === Tombol Edit ===
     btnEdit?.addEventListener("click", () => {
-      const indoText = bait.querySelector(".bait-indo")?.textContent.trim() || "";
-      const engText = bait.querySelector(".bait-eng")?.textContent.trim() || "";
-      openEditPanel(baitId, engText, indoText);
+      const indoText =
+        bait.querySelector(".bait-indo")?.textContent.trim() ||
+        bait.querySelector(".bait-eng")?.textContent.trim() ||
+        "";
+      openEditPanel(baitId, indoText);
     });
 
     // === Tombol Deskripsi ===
@@ -48,24 +49,15 @@ export function addBaitListeners() {
 
     // === Tombol Bookmark ===
     btnBookmark?.addEventListener("click", (e) => {
-      e.stopPropagation(); // cegah klik ganda pada parent
+      e.stopPropagation();
       toggleBookmark(baitId);
-
-      // Update tampilan langsung (tanpa reload)
       const isActive = btnBookmark.classList.toggle("active");
 
-      // Ambil elemen <use> di dalam tombol
       const useTag = btnBookmark.querySelector("use");
-
-      // Ganti ikon sesuai status
-      if (useTag) {
-        useTag.setAttribute(
-          "href",
-          isActive ? "#icon-bookmark-filled" : "#icon-bookmark"
-        );
-      }
+      if (useTag)
+        useTag.setAttribute("href", isActive ? "#icon-bookmark-filled" : "#icon-bookmark");
     });
-  }); // ← penting: tutup forEach
+  });
 }
 
 // =============================
