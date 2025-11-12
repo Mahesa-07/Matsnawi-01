@@ -1,0 +1,349 @@
+/* === PANEL EDIT === */
+#edit-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 998;
+  display: none;
+}
+
+#edit-overlay.show {
+  display: block;
+}
+
+.edit-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg, #111);
+  color: var(--text, #f5f5f5);
+  width: 90%;
+  max-width: 480px;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.edit-panel.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.edit-panel h3 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.edit-panel textarea {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border, #333);
+  background: var(--bg-light, #1b1b1b);
+  color: inherit;
+  resize: vertical;
+}
+
+.edit-actions,
+.edit-tools {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.divider {
+  margin: 1rem 0;
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* === Tombol === */
+button, .import-label {
+  flex: 1;
+  padding: 0.6rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-align: center;
+  transition: 0.2s;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-secondary {
+  background: #555;
+  color: #eee;
+}
+
+.btn-neutral {
+  background: #444;
+  color: #ddd;
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: white;
+}
+
+button:hover, .import-label:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+#edit-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1rem 1.2rem;
+  width: 92%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.55);
+  z-index: 1500; /* ⬆️ lebih tinggi dari overlay manapun */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+/* Saat aktif */
+#edit-panel.show {
+  opacity: 1;
+  pointer-events: all;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* backdrop terpisah agar tidak menutup panel */
+#edit-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(5px);
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 1400;
+  pointer-events: none;
+}
+#edit-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* isi panel tetap sama */
+#edit-panel h3 {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+}
+#edit-panel label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--accent);
+}
+#edit-panel textarea {
+  width: 100%;
+  min-height: 100px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  resize: vertical;
+  margin-bottom: 1rem;
+}
+#saveEditBtn {
+  background: var(--accent);
+  color: var(--bg);
+}
+#cancelEditBtn {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+#saveEditBtn:hover {
+  background: #fff;
+  color: #000;
+}
+#cancelEditBtn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+/* =========================
+⚠️ Dialog Konfirmasi
+========================= */
+#confirm-dialog {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1400;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+#confirm-dialog.show {
+  opacity: 1;
+  pointer-events: all;
+}
+/* ===============================
+   ✏️ PANEL EDIT BAIT
+=================================*/
+#edit-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 90;
+}
+
+.edit-panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  background: var(--panel, #151617);
+  color: var(--text, #e6e7e8);
+  border: 1px solid var(--accent, #d4c27b);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 480px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+
+.edit-panel.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.edit-panel.show + #edit-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ===============================
+   📝 Konten dalam Panel
+=================================*/
+.edit-panel h3 {
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 1.2rem;
+  color: var(--accent, #d4c27b);
+  border-bottom: 1px solid var(--accent, #d4c27b);
+  padding-bottom: 0.5rem;
+}
+
+.edit-panel label {
+  display: block;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--muted, #aaa);
+}
+
+.edit-panel textarea {
+  width: 100%;
+  min-height: 80px;
+  background: #1b1c1d;
+  color: var(--text, #e6e7e8);
+  border: 1px solid #333;
+  border-radius: 0.5rem;
+  padding: 0.7rem;
+  margin-top: 0.3rem;
+  resize: vertical;
+  font-family: system-ui, sans-serif;
+  font-size: 0.9rem;
+}
+
+.edit-panel textarea:focus {
+  outline: none;
+  border-color: var(--accent, #d4c27b);
+  box-shadow: 0 0 0 1px var(--accent, #d4c27b);
+}
+
+/* ===============================
+   🎛️ Tombol Aksi
+=================================*/
+.edit-actions,
+.edit-tools {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.edit-tools {
+  margin-top: 0.8rem;
+  border-top: 1px solid #333;
+  padding-top: 0.8rem;
+}
+
+/* Tombol dasar */
+.edit-panel button {
+  background: #222;
+  color: var(--text, #e6e7e8);
+  border: 1px solid #444;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.edit-panel button:hover {
+  background: var(--accent, #d4c27b);
+  color: #000;
+}
+
+/* Tombol khusus */
+.btn-save {
+  background: var(--accent, #d4c27b);
+  color: #000;
+  font-weight: 600;
+}
+
+.btn-cancel {
+  background: #333;
+  color: var(--muted, #aaa);
+}
+
+.btn-cancel:hover {
+  background: #444;
+  color: var(--text);
+}
+
+/* Responsif */
+@media (max-width: 500px) {
+  .edit-panel {
+    width: 95%;
+    padding: 1rem;
+  }
+}
