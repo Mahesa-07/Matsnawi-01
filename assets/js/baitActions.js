@@ -1,5 +1,5 @@
 // -*- coding: utf-8 -*-
-// 🎯 baitActions.js — Bookmark, Edit, Deskripsi (ESModule Sinkron Final)
+// 🎯 baitActions.js — Bookmark, Edit, Deskripsi (ESModule Final)
 
 import { showToast } from "./toast.js";
 import { openEditPanel } from "./editPanel.js";
@@ -11,75 +11,61 @@ import { toggleBookmark } from "./bookmark.js";
 export function addBaitListeners() {
   const bookmarks = JSON.parse(localStorage.getItem("bookmarks") || "[]").map(Number);
 
-  // Hapus dulu semua listener lama untuk mencegah duplikasi
-  document.querySelectorAll(".bait").forEach((bait) => {
-    const newBait = bait.cloneNode(true);
-    bait.parentNode.replaceChild(newBait, bait);
-  });
-
   document.querySelectorAll(".bait").forEach((bait) => {
     const baitId = Number(bait.dataset.id);
     const btnBookmark = bait.querySelector(".btn-bookmark");
     const btnEdit = bait.querySelector(".btn-edit");
     const btnDesc = bait.querySelector(".btn-desc");
 
-    // 🔸 Bookmark aktif/tidak
+    // 🔸 Tandai tombol aktif jika sudah di-bookmark
     if (bookmarks.includes(baitId)) {
       btnBookmark?.classList.add("active");
       btnBookmark.innerHTML = `
         <svg width="20" height="20" viewBox="0 0 24 24">
           <use href="#icon-bookmark-filled"></use>
-        </svg>`;
+        </svg>
+      `;
     } else {
       btnBookmark?.classList.remove("active");
       btnBookmark.innerHTML = `
         <svg width="20" height="20" viewBox="0 0 24 24">
           <use href="#icon-bookmark"></use>
-        </svg>`;
+        </svg>
+      `;
     }
 
     // === Tombol Edit ===
     btnEdit?.addEventListener("click", () => {
-      const indoText = bait.querySelector(".bait-indo")?.textContent?.trim() || "";
-      const engText = bait.querySelector(".bait-eng")?.textContent?.trim() || "";
-      const descText = bait.querySelector(".bait-desc")?.textContent?.trim() || "";
-
-      // Pastikan panel menerima payload berbentuk string
-      openEditPanel({
-        id: baitId,
-        eng: engText,
-        indo: indoText,
-        desc: descText,
-      });
+      const indoText = bait.querySelector(".bait-indo")?.textContent.trim() || "";
+      const engText = bait.querySelector(".bait-eng")?.textContent.trim() || "";
+      openEditPanel(baitId, engText, indoText);
     });
 
     // === Tombol Deskripsi ===
     btnDesc?.addEventListener("click", () => {
-      const descEl = bait.querySelector(".bait-desc");
-      if (descEl) {
-        descEl.classList.toggle("hidden");
-        descEl.classList.toggle("fade-in");
-      }
+      bait.querySelector(".bait-desc")?.classList.toggle("hidden");
     });
 
     // === Tombol Bookmark ===
     btnBookmark?.addEventListener("click", (e) => {
-      e.stopPropagation();
+      e.stopPropagation(); // cegah klik ganda pada parent
       toggleBookmark(baitId);
 
+      // Update tampilan langsung (tanpa reload)
       const isActive = btnBookmark.classList.toggle("active");
+
+      // Ambil elemen <use> di dalam tombol
       const useTag = btnBookmark.querySelector("use");
 
+      // Ganti ikon sesuai status
       if (useTag) {
         useTag.setAttribute(
           "href",
           isActive ? "#icon-bookmark-filled" : "#icon-bookmark"
         );
       }
-
-      showToast(isActive ? "🔖 Ditambahkan ke bookmark" : "❌ Dihapus dari bookmark");
     });
-  });
+  }); // ← penting: tutup forEach
 }
 
 // =============================
