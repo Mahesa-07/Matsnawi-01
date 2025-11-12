@@ -1,7 +1,6 @@
 // -*- coding: utf-8 -*-
-// 📖 subbab.js — Subbab Loader & Renderer (ESModule Final, v3.1)
-// ⚙️ Bahasa default: Indonesia | Toggle Inggris via tombol 🇬🇧
-// ✏️ Sekarang sudah terhubung dengan edit-panel (localStorage)
+// 📖 subbab.js — Subbab Loader & Renderer (ESModule Final v3.3)
+// ⚙️ Sinkron dengan editPanel.js dan localStorage
 
 import { showToast } from "./toast.js";
 import {
@@ -11,7 +10,7 @@ import {
   getShowTranslation
 } from "./utils.js";
 import { addBaitListeners } from "./baitActions.js";
-import { applySavedEdits } from "./editPanel.js"; // 🔹 Tambahan penting
+import { applySavedEdits } from "./editPanel.js";
 
 const baitContainer = document.getElementById("baitContainer");
 
@@ -39,7 +38,6 @@ export function addNextButtonIfEnd() {
       const subs = babNow.subbabs || [];
       const currentSubIndex = subs.findIndex((s) => s.file === currentSubbab);
 
-      // 🔸 Masih ada subbab berikutnya
       if (currentSubIndex < subs.length - 1) {
         const nextSub = subs[currentSubIndex + 1];
         await loadSubbab(nextSub.file, babNow.bab, currentSubIndex + 1, nextSub.title);
@@ -47,9 +45,8 @@ export function addNextButtonIfEnd() {
         return;
       }
 
-      // 🔸 Kalau tidak ada, lanjut ke bab berikutnya
       const nextBab = index.files[babNowIndex + 1];
-      if (nextBab && nextBab.subbabs && nextBab.subbabs.length > 0) {
+      if (nextBab && nextBab.subbabs?.length > 0) {
         const firstSub = nextBab.subbabs[0];
         await loadSubbab(firstSub.file, nextBab.bab, 0, firstSub.title);
         showToast(`📖 ${nextBab.title || "Bab berikutnya"} dimulai`);
@@ -67,15 +64,13 @@ export function addNextButtonIfEnd() {
 }
 
 // =========================
-// 🔹 Fungsi memuat Subbab
+// 🔹 Fungsi Memuat Subbab
 // =========================
 export async function loadSubbab(file, babIndex, subIndex, title) {
   if (!file) return;
-
   console.log("🔍 Memuat subbab:", file, babIndex, subIndex, title);
-  const { currentSubbab, cacheSubbabs } = getGlobals();
 
-  // 🧩 Cegah muat ulang sama
+  const { currentSubbab, cacheSubbabs } = getGlobals();
   if (currentSubbab === file) {
     showToast(`⚠️ ${title} sudah aktif`);
     return;
@@ -83,10 +78,9 @@ export async function loadSubbab(file, babIndex, subIndex, title) {
 
   setGlobals({ currentBab: babIndex, currentSubbab: file });
 
-  // 🔸 Cek cache
+  // 🔹 Cek cache
   if (cacheSubbabs[file]) {
     const { data, offset } = cacheSubbabs[file];
-    // 🔹 Terapkan edit tersimpan
     applySavedEdits(data);
     setGlobals({ baits: data, baitOffset: offset });
     renderBaits(data, offset);
@@ -95,9 +89,6 @@ export async function loadSubbab(file, babIndex, subIndex, title) {
   }
 
   try {
-    // ======================
-    // 🔹 Hitung Offset Total
-    // ======================
     let offset = 0;
     const indexRes = await fetch("./assets/data/index.json");
     const index = await indexRes.json();
@@ -123,9 +114,6 @@ export async function loadSubbab(file, babIndex, subIndex, title) {
       }
     }
 
-    // ======================
-    // 🔹 Ambil Data Subbab
-    // ======================
     const res = await fetch(file);
     const json = await res.json();
     const data = Array.isArray(json) ? json : json.baits || [];
@@ -137,14 +125,10 @@ export async function loadSubbab(file, babIndex, subIndex, title) {
       return;
     }
 
-    // 🔹 Terapkan hasil edit dari localStorage
     applySavedEdits(data);
-
-    // Simpan cache & update global
     cacheSubbabs[file] = { data, offset };
     setGlobals({ baits: data, baitOffset: offset });
 
-    // Render bait
     renderBaits(data, offset);
     showToast(`📖 ${title} dimuat`);
   } catch (err) {
@@ -154,13 +138,11 @@ export async function loadSubbab(file, babIndex, subIndex, title) {
 }
 
 // =========================
-// 🔹 Render Bait
+// 🔹 Render Baits
 // =========================
 export function renderBaits(baits, offset = 0) {
   const showTrans = getShowTranslation();
   const edits = JSON.parse(localStorage.getItem("baitEdits") || "{}");
-
-  console.log("🐞 baitEdits localStorage:", edits); // 🔸 debug
 
   baitContainer.classList.add("bait-exit");
 
@@ -171,14 +153,12 @@ export function renderBaits(baits, offset = 0) {
     baitContainer.innerHTML = baits
       .map((b, i) => {
         const baitNumber = offset + i + 1;
+        const baitId = b.id || baitNumber;
+        const isEdited = !!edits[baitId];
+
         const textDisplay = showTrans
           ? `<div class="bait-eng">${escapeHtml(b.inggris || "")}</div>`
           : `<div class="bait-indo">${escapeHtml(b.indo || "")}</div>`;
-
-        // 🔹 Debug: selalu cek ID
-        const baitId = b.id || baitNumber;
-        const isEdited = !!edits[baitId];
-        if (isEdited) console.log(`✅ Bait ${baitId} sudah diedit`);
 
         const editMark = isEdited
           ? `<span class="edit-indicator" title="Bait ini telah diedit">🔸</span>`
@@ -212,7 +192,6 @@ export function renderBaits(baits, offset = 0) {
     addBaitListeners();
     addNextButtonIfEnd();
 
-    // 🔸 Animasi halus
     requestAnimationFrame(() => {
       baitContainer.classList.add("bait-enter-active");
       setTimeout(() => baitContainer.classList.remove("bait-enter", "bait-enter-active"), 600);
