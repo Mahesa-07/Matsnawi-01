@@ -1,6 +1,11 @@
 /* =========================
 📚 SIDEBAR — Kaca Buram & Navigasi 3 Tingkat
 ========================= */
+
+:root {
+  --transition-fast: 0.5s ease;
+}
+
 .sidebar {
   position: fixed;
   top: 0;
