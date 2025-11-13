@@ -1,228 +1,186 @@
-// -*- coding: utf-8 -*-
-// 🌒 sidebar.js — Final Stabil + Fix Tombol Menu & Gesture Area Bawah-Kiri
+/* =========================
+📚 SIDEBAR — Kaca Buram & Navigasi 3 Tingkat (Sinkron Fix)
+========================= */
 
-import { loadSubbab } from "./subbab.js";
-import { showToast } from "./toast.js";
-
-// =============================
-// 🔹 Ambil Elemen DOM
-// =============================
-const sidebar = document.getElementById("sidebar");
-const menuToggle = document.getElementById("menuToggle");
-const baitList = document.getElementById("baitList");
-
-// =============================
-// 🔹 Efek Flash Awal
-// =============================
-function flashSidebar(duration = 800) {
-  if (!sidebar || !menuToggle) return;
-  sidebar.classList.add("show");
-  menuToggle.textContent = "✖";
-  setTimeout(() => {
-    sidebar.classList.remove("show");
-    menuToggle.textContent = "☰";
-  }, duration);
+:root {
+  --transition-fast: 0.5s ease;
 }
 
-// =============================
-// 🔹 Fungsi Build Sidebar
-// =============================
-export async function buildSidebar() {
-  if (!baitList) {
-    console.warn("⚠️ Elemen #baitList tidak ditemukan.");
-    return;
-  }
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 90%;
+  max-width: 365px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--transparant);
+  backdrop-filter: blur(16px) saturate(160%);
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+  z-index: 200;
 
-  baitList.innerHTML = "";
+  /* 🚪 posisi awal: tersembunyi */
+  transform: translateX(-105%);
+  opacity: 0;
+  pointer-events: none;
 
-  try {
-    const res = await fetch("./assets/data/index.json");
-    if (!res.ok) throw new Error("Gagal memuat index.json");
-    const index = await res.json();
-
-    for (const bab of index.files) {
-      const babItem = document.createElement("div");
-      babItem.className = "sidebar-bab";
-      babItem.innerHTML = `<div class="bab-title" data-bab="${bab.bab}">${bab.title}</div>`;
-
-      const subbabList = document.createElement("ul");
-      subbabList.className = "subbab-list hidden";
-
-      for (let i = 0; i < bab.subbabs.length; i++) {
-        const sub = bab.subbabs[i];
-        const subItem = document.createElement("li");
-        subItem.className = "subbab-item";
-        subItem.innerHTML = `
-          <div class="subbab-title" data-file="${sub.file}">
-            ${sub.title}
-            ${sub.description ? `<span class="desc">${sub.description}</span>` : ""}
-          </div>
-          <ul class="bait-sublist hidden"></ul>
-        `;
-        subbabList.appendChild(subItem);
-
-        const subTitle = subItem.querySelector(".subbab-title");
-        const baitSublist = subItem.querySelector(".bait-sublist");
-
-        subTitle.addEventListener("click", async () => {
-          const visible = !baitSublist.classList.contains("hidden");
-          document.querySelectorAll(".bait-sublist").forEach(l => l.classList.add("hidden"));
-          if (!visible) {
-            await loadSubbabPreview(sub.file, baitSublist, bab, i, sub);
-            baitSublist.classList.remove("hidden");
-          } else baitSublist.classList.add("hidden");
-        });
-
-        subTitle.addEventListener("dblclick", () => {
-          loadSubbab(sub.file, bab.bab, i, sub.title);
-          closeSidebar();
-        });
-      }
-
-      const babTitle = babItem.querySelector(".bab-title");
-      babTitle.addEventListener("click", () => {
-        const visible = !subbabList.classList.contains("hidden");
-        document.querySelectorAll(".subbab-list").forEach(l => l.classList.add("hidden"));
-        if (!visible) subbabList.classList.remove("hidden");
-      });
-
-      babItem.appendChild(subbabList);
-      baitList.appendChild(babItem);
-    }
-
-    if (!window._sidebarFlashed) {
-      window._sidebarFlashed = true;
-      flashSidebar();
-    }
-  } catch (err) {
-    console.error("❌ buildSidebar error:", err);
-    baitList.innerHTML = "<li>⚠️ Gagal memuat daftar Bab</li>";
-    showToast("Tidak bisa memuat daftar Bab.");
-  }
+  transition:
+    transform 0.55s cubic-bezier(0.25, 1, 0.3, 1),
+    opacity 0.35s ease-in-out;
+  will-change: transform, opacity;
 }
 
-// =============================
-// 🔹 Fungsi Preview Bait
-// =============================
-async function loadSubbabPreview(file, subList, bab, subIndex, sub) {
-  try {
-    const res = await fetch(file);
-    if (!res.ok) throw new Error(`Gagal memuat ${file}`);
-    const data = await res.json();
-
-    subList.innerHTML = data
-      .map(
-        b => `
-        <li class="bait-item" data-id="${b.id}">
-          <span class="bait-number">${b.id}.</span>
-          <span class="bait-text">${(b.indo || "").slice(0, 30)}...</span>
-        </li>`
-      )
-      .join("");
-
-    subList.querySelectorAll(".bait-item").forEach(li => {
-      li.addEventListener("click", async () => {
-        await loadSubbab(sub.file, bab.bab, subIndex, sub.title);
-        const id = Number(li.dataset.id);
-        const el = document.querySelector(`.bait[data-id='${id}']`);
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
-        closeSidebar();
-      });
-    });
-  } catch (err) {
-    console.error("❌ loadSubbabPreview error:", err);
-    subList.innerHTML = "<li>⚠️ Gagal memuat bait</li>";
-  }
+/* 🎬 Saat muncul */
+.sidebar.show {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.35);
 }
 
-// =============================
-// 🔹 Kontrol Sidebar
-// =============================
-export function openSidebar() {
-  sidebar.classList.add("show");
-  sidebar.style.transform = "translateX(0)";
-  sidebar.style.opacity = "1";
-  sidebar.style.pointerEvents = "auto";
-  menuToggle.textContent = "✖";
-}
-export function closeSidebar() {
-  sidebar.classList.remove("show");
-  sidebar.style.transform = "translateX(-105%)";
-  sidebar.style.opacity = "0";
-  sidebar.style.pointerEvents = "none";
-  menuToggle.textContent = "☰";
-}
-export function toggleSidebar() {
-  sidebar.classList.contains("show") ? closeSidebar() : openSidebar();
+/* =====================
+   Header
+===================== */
+.sidebar-header {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid var(--border);
+  font-weight: 500;
+  font-size: 0.7rem;
+  letter-spacing: 0.4px;
+  color: var(--sub-judul);
+  text-transform: uppercase;
+  opacity: 0.88;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-// =============================
-// 🔹 Inisialisasi Event + Gesture Area
-// =============================
-document.addEventListener("DOMContentLoaded", () => {
-  if (!menuToggle || !sidebar) return;
+/* =====================
+   Daftar isi
+===================== */
+.sidebar-list {
+  margin-top: 1rem;
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
 
-  // Klik tombol menu
-  menuToggle.addEventListener("click", (e) => {
-    e.stopPropagation();
-    toggleSidebar();
-  });
+/* Scrollbar */
+.sidebar-list::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+}
+.sidebar-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
 
-  // ESC → tutup
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape" && sidebar.classList.contains("show")) closeSidebar();
-  });
+/* =====================
+   Bab & Subbab
+===================== */
+.sidebar-bab {
+  position: relative;
+  margin-bottom: 0.6rem;
+  padding-left: 0.4rem;
+}
 
-  // Klik luar sidebar → tutup
-  document.addEventListener("click", e => {
-    const target = e.target;
-    if (!sidebar.contains(target) && !menuToggle.contains(target)) {
-      closeSidebar();
-    }
-  });
+.bab-title {
+  cursor: pointer;
+  padding: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--sub-judul);
+  user-select: none;
+  border-bottom: 1px solid var(--fade);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
 
-  // ==========================================
-  // 🟢 Gesture Area Transparan Kiri-Bawah
-  // ==========================================
-  const gestureArea = document.createElement("div");
-  gestureArea.id = "gesture-area";
-  document.body.appendChild(gestureArea);
+.bab-title:hover {
+  background: var(--fade);
+  color: var(--highlight);
+}
 
-  Object.assign(gestureArea.style, {
-    position: "fixed",
-    left: "0",
-    bottom: "0",
-    width: "40px",
-    height: "60%",
-    zIndex: "99",
-    background: "transparent",
-    touchAction: "none",
-  });
+.subbab-list {
+  margin-left: 0.6rem;
+  padding-left: 0.3rem;
+  border-left: 1.5px solid var(--fade);
+}
 
-  let startX = 0;
-  let currentX = 0;
-  let touching = false;
+.subbab-title {
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  color: var(--text);
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.subbab-title:hover {
+  background: var(--fade);
+  color: var(--accent);
+}
 
-  gestureArea.addEventListener("touchstart", (e) => {
-    if (e.touches.length !== 1) return;
-    touching = true;
-    startX = e.touches[0].clientX;
-  });
+/* =====================
+   Daftar bait
+===================== */
+.bait-sublist {
+  margin-left: 0.6rem;
+  padding-left: 0.6rem;
+  border-left: 1.5px dashed var(--fade);
+  font-size: 0.7rem;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    max-height 0.4s ease,
+    opacity 0.25s ease,
+    transform 0.35s ease;
+}
 
-  gestureArea.addEventListener("touchmove", (e) => {
-    if (!touching) return;
-    currentX = e.touches[0].clientX;
-    const translateX = Math.min(0, currentX - 270);
-    sidebar.style.transform = `translateX(${translateX}px)`;
-    sidebar.style.opacity = Math.min(1, (currentX / 270) * 1.2);
-  });
+.bait-sublist.show {
+  max-height: 9999px;
+  opacity: 1;
+  transform: translateY(0);
+}
 
-  gestureArea.addEventListener("touchend", () => {
-    if (!touching) return;
-    touching = false;
-    if (currentX > 90) openSidebar();
-    else closeSidebar();
-  });
-
-  showToast?.("Gesture area kiri bawah aktif 🌙");
-});
+/* =====================
+   Tombol & Ikon
+===================== */
+.icon-btn,
+#toggleLangBtn,
+#themeToggle {
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 0.8rem;
+  padding: 0.2rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.icon-btn:hover,
+#langSwitch:hover,
+#themeToggle:hover {
+  transform: scale(1.15);
+}
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 6px 8px;
+  font: inherit;
+}
+.icon-btn svg { display: block; }
