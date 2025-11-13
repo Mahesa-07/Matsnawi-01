@@ -1,5 +1,5 @@
 /* =========================
-📚 SIDEBAR — Kaca Buram & Navigasi 3 Tingkat
+📚 SIDEBAR — Kaca Buram & Navigasi 3 Tingkat (Sinkron Fix)
 ========================= */
 
 :root {
@@ -12,24 +12,37 @@
   left: 0;
   width: 90%;
   max-width: 365px;
-  height: 100%;
+  height: 100vh;
   display: flex;
-  flex-direction: column; /* untuk sidebar-header + daftar */
+  flex-direction: column;
   background: var(--transparant);
   backdrop-filter: blur(16px) saturate(160%);
   border-right: 1px solid var(--border);
-  transform: translateX(-100%);
- transition: transform 0.5s cubic-bezier(0.25, 1, 0.3, 1);
+  overflow: hidden;
   z-index: 200;
-  overflow: hidden; /* scroll hanya di list */
-  
+
+  /* 🚪 posisi awal: tersembunyi */
+  transform: translateX(-105%);
+  opacity: 0;
+  pointer-events: none;
+
+  transition:
+    transform 0.55s cubic-bezier(0.25, 1, 0.3, 1),
+    opacity 0.35s ease-in-out;
+  will-change: transform, opacity;
 }
 
+/* 🎬 Saat muncul */
 .sidebar.show {
+  transform: translateX(0);
+  opacity: 1;
+  pointer-events: auto;
   box-shadow: 2px 0 16px rgba(0, 0, 0, 0.35);
 }
 
-/* Header */
+/* =====================
+   Header
+===================== */
 .sidebar-header {
   padding: 0.8rem 1rem;
   border-bottom: 1px solid var(--border);
@@ -46,15 +59,17 @@
   gap: 0.75rem;
 }
 
-/* Container daftar bab & bait */
+/* =====================
+   Daftar isi
+===================== */
 .sidebar-list {
   margin-top: 1rem;
-  flex: 1;             /* ambil sisa tinggi */
-  overflow-y: auto;    /* scroll jika konten panjang */
+  flex: 1;
+  overflow-y: auto;
   padding-right: 0.5rem;
 }
 
-/* Scrollbar halus */
+/* Scrollbar */
 .sidebar-list::-webkit-scrollbar {
   width: 6px;
 }
@@ -66,12 +81,15 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* Bab */
+/* =====================
+   Bab & Subbab
+===================== */
 .sidebar-bab {
   position: relative;
   margin-bottom: 0.6rem;
   padding-left: 0.4rem;
 }
+
 .bab-title {
   cursor: pointer;
   padding: 0.8rem;
@@ -85,22 +103,18 @@
   border-bottom: 1px solid var(--fade);
   transition: background var(--transition-fast), color var(--transition-fast);
 }
+
 .bab-title:hover {
   background: var(--fade);
   color: var(--highlight);
 }
-.bab-title .arrow {
-  font-size: 0.8rem;
-  opacity: 0.7;
-  transition: transform var(--transition-slow);
-}
 
-/* Subbab */
 .subbab-list {
   margin-left: 0.6rem;
   padding-left: 0.3rem;
   border-left: 1.5px solid var(--fade);
 }
+
 .subbab-title {
   cursor: pointer;
   padding: 0.3rem 0.5rem;
@@ -114,22 +128,10 @@
   background: var(--fade);
   color: var(--accent);
 }
-.subbab-title::before {
-  content: "•";
-  color: var(--accent);
-  font-weight: bold;
-  margin-right: 0.5rem;
-  font-size: 0.8rem;
-  opacity: 0.8;
-  transform: translateY(-1px);
-}
-.subbab-title:hover::before {
-  opacity: 1;
-  transform: scale(1.2);
-  transition: all var(--transition-fast);
-}
 
-/* Daftar bait */
+/* =====================
+   Daftar bait
+===================== */
 .bait-sublist {
   margin-left: 0.6rem;
   padding-left: 0.6rem;
@@ -144,36 +146,16 @@
     opacity 0.25s ease,
     transform 0.35s ease;
 }
+
 .bait-sublist.show {
-  max-height: 9999px; /* tidak terpotong */
+  max-height: 9999px;
   opacity: 1;
   transform: translateY(0);
 }
-.bait-item {
-  padding: 0.3rem 0.5rem;
-  margin: 0.2rem 0;
-  border-radius: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  transition: background var(--transition-fast), color var(--transition-fast);
-}
-.bait-item::before {
-  content: "◦";
-  color: var(--highlight);
-  margin-right: 0.4rem;
-  font-size: 0.7rem;
-  opacity: 0.7;
-}
-.bait-item:hover {
-  background: var(--fade);
-  color: var(--accent);
-}
-.bait-item:hover::before {
-  opacity: 1;
-  transform: scale(1.3);
-  transition: all var(--transition-fast);
-}
+
+/* =====================
+   Tombol & Ikon
+===================== */
 .icon-btn,
 #toggleLangBtn,
 #themeToggle {
@@ -202,26 +184,3 @@
   font: inherit;
 }
 .icon-btn svg { display: block; }
-/* Tambahkan di bawah .sidebar.show yang lama atau ganti isinya */
-.sidebar.show {
-  transform: translateX(0);
-  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.35);
-}
-/* ✅ Fix Sidebar agar tampil stabil dan penuh */
-#sidebar {
-  transform: translateX(-100%);
-  opacity: 0;
-  transition:
-    transform 0.6s cubic-bezier(0.25, 1, 0.3, 1),
-    opacity 0.3s ease;
-  will-change: transform, opacity;
-}
-
-/* Saat aktif (tombol diklik) */
-#sidebar.show {
-  transform: translateX(0);
-  opacity: 1;
-  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.45);
-  z-index: 200;
-}
-
