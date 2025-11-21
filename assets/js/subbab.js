@@ -205,7 +205,7 @@ export function renderBaits(baits = null, offset = 0) {
   <div class="bait-footer">
     <div class="bait-marker">
       ﴾${baitNumber}﴿
-      ${isEdited ? `<span class="edit-indicator">teks diperbarui</span>` : ""}
+      ${isEdited ? `<span class="edit-indicator">°</span>` : ""}
     </div>
 
     <div class="bait-actions">
