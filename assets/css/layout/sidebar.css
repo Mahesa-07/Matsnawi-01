@@ -1,5 +1,5 @@
 /* ============================================================
-🌟 MATSNAWI UI — Final Ultra Clean CSS (Unified Blue Glass)
+🌟 MATSNAWI UI — Ultra Clean CSS (Blue-Glass Optimized 2025)
 ============================================================ */
 
 /* =========================
@@ -8,44 +8,37 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap");
 
 :root {
-  --accent: #7ecbff;        /* biru utama */
+  --accent: #7ecbff;
   --accent-red: #c65b5b;
 
-  --bg-blur: rgba(15, 20, 30, 0.35);
-  --fade: rgba(255, 255, 255, 0.05);
-  --border: rgba(120, 200, 255, 0.12);
+  --bg-blur: rgba(15, 20, 30, 0.38);
+  --fade: rgba(255, 255, 255, 0.06);
+  --border: rgba(120, 200, 255, 0.14);
 
-  --text: #f2f2f2;
+  --text: #f0f0f0;
   --text-strong: #fff;
   --subtext: #b8dbff;
 
-  --highlight: linear-gradient(
-      120deg,
-      rgba(120, 200, 255, .12),
-      rgba(120, 160, 255, .07)
-  );
+  --highlight: linear-gradient(120deg, rgba(120, 200, 255, .14), rgba(120, 160, 255, .08));
 
   --color-bab: #a8ddff;
   --color-subbab: #cce8ff;
   --color-bait: #e9f6ff;
 
   --font-base: "Noto Sans", "Open Sans", system-ui, sans-serif;
-  --transition-fast: .3s ease;
+  --transition-fast: .25s ease;
   --transition-medium: .45s cubic-bezier(.25,1,.3,1);
 }
 
-/* 🌗 Light Theme */
+/* 🌗 Light Theme Optimized */
 body.light {
   --accent: #0078d4;
-  --accent-red: #b33;
-  --bg-blur: rgba(255,255,255,.9);
-  --fade: rgba(0,0,0,.05);
-  --border: rgba(0,0,0,.12);
-
   --text: #222;
   --text-strong: #111;
-  --subtext: #336;
-
+  --subtext: #335;
+  --bg-blur: rgba(255,255,255,.93);
+  --fade: rgba(0,0,0,.05);
+  --border: rgba(0,0,0,.14);
   --highlight: linear-gradient(120deg, rgba(0,120,212,.12), rgba(0,0,0,.04));
 
   --color-bab: #0078d4;
@@ -61,7 +54,7 @@ body.light {
   top: 0; left: 0;
   width: 88%;
   max-width: 320px;
-  height: 100vh;                /* lebih presisi daripada 100% */
+  height: 100vh;
   display: flex;
   flex-direction: column;
 
@@ -70,64 +63,47 @@ body.light {
   -webkit-backdrop-filter: blur(18px) saturate(180%);
   border-right: 1px solid var(--border);
 
-  /* 🔥 Scroll fix */
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-width: thin;            /* Firefox */
-  scrollbar-color: var(--accent) transparent;
-
-  /* UI nyaman */
-  scroll-behavior: smooth;
-  padding-right: .3rem;             /* ruang supaya scrollbar tak timpa teks */
+  padding-right: .4rem;
 
   transform: translateX(-100%);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: transform var(--transition-medium), opacity .3s ease;
+  transition:
+    transform var(--transition-medium),
+    opacity .35s ease;
+
   z-index: 200;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
 }
 
-/* 🎨 Webkit (Chrome, Edge, Opera) */
 .sidebar::-webkit-scrollbar {
   width: 6px;
 }
-
 .sidebar::-webkit-scrollbar-thumb {
   background: var(--accent);
-  border-radius: 5px;
+  border-radius: 6px;
 }
 
-.sidebar::-webkit-scrollbar-track {
-  background: transparent;
-}
+/* When opened */
 .sidebar.show {
   transform: translateX(0);
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  box-shadow: 2px 0 20px rgba(0, 0, 50, .45);
+  box-shadow: 2px 0 20px rgba(0,0,45,.45);
 }
 
 .sidebar-list {
   flex: 1;
-  overflow-y: auto;
   padding: 1rem .8rem 2rem;
 }
 
-.sidebar-list::-webkit-scrollbar {
-  width: 6px;
-}
-.sidebar-list::-webkit-scrollbar-thumb {
-  background: rgba(160,210,255,.2);
-  border-radius: 10px;
-}
-.sidebar-list::-webkit-scrollbar-thumb:hover {
-  background: rgba(180,220,255,.35);
-}
-
 /* =========================
-📘 BAB / SUBBAB / ITEM
+📘 BAB / SUBBAB / BAIT
 ========================= */
 .sidebar-title {
   margin: 1.2rem 1.2rem .8rem;
@@ -136,17 +112,16 @@ body.light {
   letter-spacing: .5px;
   text-transform: uppercase;
   color: var(--text-strong);
-  opacity: .9;
   border-bottom: 1px solid var(--border);
+  opacity: .9;
 }
-
 .sidebar-title:hover {
-  color: var(--accent);
   opacity: 1;
+  color: var(--accent);
 }
 
 .sidebar-bab {
-  margin-bottom: .8rem;
+  margin-bottom: .9rem;
   padding-bottom: .4rem;
   border-bottom: 1px solid var(--fade);
 }
@@ -156,98 +131,78 @@ body.light {
   color: var(--color-bab);
   padding: .75rem .9rem;
   cursor: pointer;
-
   border-radius: 6px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  transition: color var(--transition-fast), background var(--transition-fast);
+  transition: var(--transition-fast);
 }
-
 .bab-title:hover {
-  background: rgba(140,200,255,.09);
   color: var(--accent);
+  background: rgba(140,200,255,.10);
 }
-
 .bab-title.show {
   background: var(--highlight);
-  color: var(--accent);
   box-shadow: inset 2px 0 0 var(--accent);
+  color: var(--accent);
 }
 
-.subbab-list {
+/* --- GPU-optimized collapse --- */
+.subbab-list,
+.bait-sublist {
   max-height: 0;
-  overflow: visible !important;      /* IZINKAN tampil semua konten */
+  overflow: hidden;               /* ← penting */
   opacity: 0;
-  transform: scaleY(.96);
-  transform-origin: top;
-  transition: transform .45s ease, opacity .45s ease;
+  transform: translateY(-4px);
+  transition:
+    max-height .45s ease,
+    opacity .45s ease,
+    transform .45s ease;
+  will-change: max-height, opacity, transform;
 }
-.subbab-list.show {
-  max-height: none !important;       /* TANPA BATAS */
+.subbab-list.show,
+.bait-sublist.show {
+  max-height: 2000px;             /* batas aman */
   opacity: 1;
-  transform: scaleY(1);
+  transform: translateY(0);
 }
 
 .subbab-title {
-  padding: .45rem 1rem;
+  padding: .46rem 1rem;
   font-size: .85rem;
   font-weight: 600;
   color: var(--color-subbab);
   cursor: pointer;
-
   border-radius: 4px;
-  transition: color var(--transition-fast), background var(--transition-fast);
+  transition: var(--transition-fast);
 }
-
 .subbab-title:hover {
-  background: rgba(140,200,255,.08);
+  background: rgba(140,200,255,.09);
   color: var(--accent);
 }
-
 .subbab-title.active {
   background: var(--highlight);
   color: var(--accent);
   box-shadow: inset 2px 0 0 var(--accent);
 }
-.subbab-list, .bait-sublist {
-  will-change: transform, opacity;
-}
-.bait-sublist {
-  max-height: 0;
-  overflow: visible !important;
-  opacity: 0;
-  transform: scaleY(.96);
-  transform-origin: top;
-  transition: transform .4s ease, opacity .4s ease;
-}
 
-.bait-sublist.show {
-  max-height: none !important;
-  opacity: 1;
-  transform: scaleY(1);
-}
-
+/* Bait item */
 .bait-item {
-  padding: .35rem .9rem;
-  font-size: .78rem;
+  padding: .36rem .95rem;
+  font-size: .79rem;
   color: var(--color-bait);
   cursor: pointer;
-  border-radius: 3px;
-  transition: color var(--transition-fast), background var(--transition-fast);
+  border-radius: 4px;
+  transition: var(--transition-fast);
+  word-wrap: break-word;
 }
-
 .bait-item:hover {
   color: var(--accent);
-  background: rgba(140,200,255,.08);
+  background: rgba(140,200,255,.10);
 }
-/* 🎯 Safety untuk elemen internal */
-.sidebar * {
-  overflow: visible;  /* Hindari pemotongan konten */
-}
+
 /* =========================
-🌿 Content Area
+🌿 CONTENT AREA
 ========================= */
 .main-content {
   margin-left: clamp(280px, 25vw, 340px);
@@ -256,15 +211,14 @@ body.light {
 
   font-family: var(--font-base);
   color: var(--color-bait);
-  line-height: 1.45;
-
-  transition: margin .4s ease;
+  line-height: 1.5;
+  transition: margin .35s ease;
 }
 
 @media (max-width: 600px) {
   .main-content {
     margin-left: 0;
-    padding: 1.5rem;
+    padding: 1.4rem;
   }
 }
 
@@ -273,72 +227,67 @@ body.light {
   font-size: 1rem;
   transition: color .3s ease, transform .3s ease;
 }
-
 .bait:hover {
   color: var(--subtext);
   transform: translateX(6px);
 }
 
 /* =========================
-🔻 Arrow Rotation
+🔻 Arrow rotation
 ========================= */
 .bab-title .arrow,
 .subbab-title .arrow {
   transition: transform .35s ease;
 }
-
 .bab-title.show .arrow,
 .subbab-title.active .arrow {
   transform: rotate(90deg);
 }
 
-/* ============================================================
-✨ INTERAKSI / HIGHLIGHT & ANIMASI
-============================================================ */
-
-/* 🔍 Highlight hasil pencarian */
+/* =========================
+✨ SEARCH & HIGHLIGHT
+========================= */
 .highlight {
   background: rgba(150,210,255,0.35);
   color: var(--text);
   border-radius: 3px;
   padding: 0 3px;
 }
-
 body.light .highlight {
-  background: rgba(0,140,220,0.35);
+  background: rgba(0,140,220,0.32);
   color: #111;
 }
 
-/* 💫 Efek sorot bait saat diklik */
+/* =========================
+💫 Bait Highlight Pulse
+========================= */
 .bait.highlighted {
   position: relative;
   background: rgba(150,210,255,0.18);
   box-shadow: 0 0 8px rgba(150,210,255,0.33);
-  border-radius: 0.4rem;
-  transition: background .4s ease, box-shadow .4s ease;
+  border-radius: 7px;
+  transition: .4s ease;
 }
-
 .bait.highlighted::after {
   content: "";
   position: absolute;
   inset: 0;
-  border: 1px solid rgba(150, 210, 255, .5);
   border-radius: inherit;
+  border: 1px solid rgba(150,210,255,.5);
   pointer-events: none;
-  animation: pulseGlow 1.4s ease-out;
+  animation: pulseGlow 1.3s ease-out;
 }
-
 @keyframes pulseGlow {
   0% { opacity: 0; transform: scale(0.97); }
   40% { opacity: 1; transform: scale(1.02); }
   100% { opacity: 0; transform: scale(1); }
 }
 
-/* 🌫 Fade */
-.bait-text { transition: opacity .25s ease; opacity: 1; }
-.bait-text.fade-out, .fade-out { opacity: 0; }
-.bait-text.fade-in, .fade-in { animation: fadeIn .25s forwards; }
-
+/* =========================
+🌫 Fade utility
+========================= */
+.fade-out { opacity: 0 !important; }
+.fade-in { animation: fadeIn .28s forwards; }
 @keyframes fadeIn { to { opacity: 1; } }
 
-.hidden { display: none; }
+.hidden { display: none !important; }
