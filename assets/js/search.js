@@ -47,7 +47,7 @@ function escapeRegex(s) {
 function initWorker() {
   if (!window.Worker) return false;
   try {
-    worker = new Worker("./js/search.worker.js", { type: "classic" }); // path updated to /js/
+    worker = new Worker("./js/search.worker.js", { type: "classic" });
   } catch (e) {
     try {
       worker = new Worker("./js/search.worker.js", { type: "module" });
@@ -79,16 +79,15 @@ function initWorker() {
     workerReady = false;
   };
 
-  // start building cache
   try {
     worker.postMessage({ type: "init" });
   } catch (e) {
-    console.warn("Worker postMessage failed", e);
+    console.warn("Worker message failed:", e);
   }
   return true;
 }
 
-// fallback cache builder (main thread, parallel)
+// fallback cache builder
 async function buildFallbackCache() {
   if (fallbackCache) return fallbackCache;
 
@@ -111,9 +110,11 @@ async function buildFallbackCache() {
 
   const results = await Promise.all(tasks.map(t => t.promise));
   const cache = [];
+
   results.forEach((json, i) => {
     const t = tasks[i];
     const arr = Array.isArray(json) ? json : (json.baits || []);
+
     arr.forEach((b, baitIndex) => {
       cache.push({
         id: b.id ?? (baitIndex + 1),
@@ -138,6 +139,7 @@ async function buildFallbackCache() {
 // render results
 function renderResults(results = [], q = "") {
   if (!searchResults) return;
+
   if (!results.length) {
     searchResults.innerHTML = `<div class="no-results">❌ Tidak ditemukan: "<b>${escapeHtml(q)}</b>"</div>`;
     return;
@@ -150,6 +152,7 @@ function renderResults(results = [], q = "") {
     const baitNum = b.id ?? (b.baitIndex + 1);
     const text = escapeHtml((b.indo || b.inggris || "")).replace(regex, `<span class="highlight">$1</span>`);
     const info = `${escapeHtml(b.babTitle)}${b.subTitle ? " › " + escapeHtml(b.subTitle) : ""} › Bait ${baitNum}`;
+
     return `
       <div class="search-item"
            data-file="${escapeAttr(b.file)}"
@@ -162,7 +165,6 @@ function renderResults(results = [], q = "") {
       </div>`;
   }).join("");
 
-  // attach click handlers
   searchResults.querySelectorAll(".search-item").forEach((el) => {
     el.addEventListener("click", async () => {
       try {
@@ -182,22 +184,20 @@ function renderResults(results = [], q = "") {
               baitEl.scrollIntoView({ behavior: "smooth", block: "center" });
               baitEl.classList.add("search-highlight");
               setTimeout(() => baitEl.classList.remove("search-highlight"), 2000);
-            } else {
-              console.warn(`Bait ${baitId} not found in DOM.`);
             }
           });
         }
 
         closeSearch();
       } catch (err) {
-        console.error("Error opening subbab from search item:", err);
+        console.error("Error opening from search:", err);
         showToast("Gagal membuka subbab.");
       }
     });
   });
 }
 
-// search pipeline (debounced)
+// SEARCH PIPELINE (debounced)
 async function runSearch(q) {
   if (!q || !q.trim()) {
     searchResults.innerHTML = "";
@@ -205,28 +205,33 @@ async function runSearch(q) {
     return;
   }
 
-  // prefer worker
   if (worker) {
     try {
       worker.postMessage({ type: "search", q });
       return;
-    } catch (e) {
-      console.warn("Worker post failed, falling back:", e);
+    } catch {
       worker = null;
     }
   }
 
-  // fallback main-thread search
+  // ==========================
+  // 🔥 Fallback Whole-Word Search
+  // ==========================
   try {
     const cache = await buildFallbackCache();
-    const qLow = q.toLowerCase();
+
+    const qLow = q.toLowerCase().trim();
+    const rex = new RegExp(`\\b${escapeRegex(qLow)}\\b`, "i");
+
     const filtered = cache.filter(b =>
-      (b.indo || "").toLowerCase().includes(qLow) ||
-      (b.inggris || "").toLowerCase().includes(qLow) ||
-      (b.title || "").toLowerCase().includes(qLow) ||
-      b.id?.toString().includes(qLow)
+      rex.test((b.indo || "").toLowerCase()) ||
+      rex.test((b.inggris || "").toLowerCase()) ||
+      rex.test((b.title || "").toLowerCase()) ||
+      rex.test((b.id || "").toString())
     );
+
     renderResults(filtered, q);
+
   } catch (err) {
     console.error("Fallback search error:", err);
     showToast("Gagal memuat data pencarian.");
@@ -235,7 +240,7 @@ async function runSearch(q) {
   }
 }
 
-// debounce input
+// debounce
 searchField?.addEventListener("input", () => {
   const q = (searchField.value || "").trim();
   if (!q) {
@@ -244,9 +249,11 @@ searchField?.addEventListener("input", () => {
   }
 
   if (debounceTimer) clearTimeout(debounceTimer);
+
   debounceTimer = setTimeout(() => {
     if (runningSearch) return;
     runningSearch = true;
+
     if (worker && !workerReady) {
       searchResults.innerHTML = `<div class="loading">Mencari…</div>`;
       const check = setInterval(() => {
@@ -264,7 +271,5 @@ searchField?.addEventListener("input", () => {
 // startup
 (function startup() {
   const ok = initWorker();
-  if (!ok) {
-    console.info("Worker unsupported — fallback mode enabled.");
-  }
+  if (!ok) console.info("Worker unsupported — fallback mode enabled.");
 })();
