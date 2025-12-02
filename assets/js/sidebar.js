@@ -1,5 +1,5 @@
 // -*- coding: utf-8 -*-
-// 📚 sidebar.js — FINAL ZEN + SMOOTH UI
+// 📚 sidebar.js — ZEN FIXED v2 (Stable, Anti-Bug, Smooth UI)
 
 import { loadSubbab } from "./subbab.js";
 import { showToast } from "./toast.js";
@@ -8,8 +8,11 @@ const sidebar = document.getElementById("sidebar");
 const menuToggle = document.getElementById("menuToggle");
 const baitList = document.getElementById("baitList");
 
-let animLocked = false; // ⛔ Hindari animasi bertumpuk
+let animLocked = false;
 
+// =====================================
+// 🔒 Anti Animasi Bentrok
+// =====================================
 function animateOnce(action, delay = 250) {
   if (animLocked) return;
   animLocked = true;
@@ -17,9 +20,9 @@ function animateOnce(action, delay = 250) {
   setTimeout(() => (animLocked = false), delay);
 }
 
-// =============================
-// ⚡ Flash Sidebar Saat Awal
-// =============================
+// =====================================
+// 💡 Flash Sidebar Saat Awal
+// =====================================
 function flashSidebar(duration = 800) {
   animateOnce(() => {
     sidebar.classList.add("show");
@@ -31,9 +34,9 @@ function flashSidebar(duration = 800) {
   }, duration);
 }
 
-// =============================
-// 🧭 Build Sidebar Utama
-// =============================
+// =====================================
+// 🧭 Build Sidebar
+// =====================================
 export async function buildSidebar() {
   if (!baitList) return console.warn("⚠️ #baitList tidak ditemukan.");
 
@@ -57,6 +60,9 @@ export async function buildSidebar() {
       const subbabList = document.createElement("ul");
       subbabList.className = "subbab-list";
 
+      // =====================================
+      // 🔹 Loop Subbab
+      // =====================================
       bab.subbabs.forEach((sub, subIndex) => {
         const subItem = document.createElement("li");
         subItem.className = "subbab-item";
@@ -73,36 +79,53 @@ export async function buildSidebar() {
         const subTitle = subItem.querySelector(".subbab-title");
         const baitSublist = subItem.querySelector(".bait-sublist");
 
-        // Klik sekali → Preview smooth
-        subTitle.addEventListener("click", async (e) => {
+        // =====================================
+        // ✨ FIX: Click + Double Click Unified
+        // =====================================
+        let clickTimer = null;
+
+        subTitle.addEventListener("click", (e) => {
           e.stopPropagation();
 
-          const isVisible = baitSublist.classList.contains("show");
+          // ---------- DOUBLE CLICK DETECTED ----------
+          if (clickTimer) {
+            clearTimeout(clickTimer);
+            clickTimer = null;
 
-          document.querySelectorAll(".bait-sublist.show").forEach((l) => {
-            l.classList.remove("show");
-            l.style.transform = "scaleY(0)";
-          });
-
-          if (!isVisible) {
-            await loadSubbabPreview(sub.file, baitSublist, bab, subIndex, sub);
-            requestAnimationFrame(() => {
-              baitSublist.classList.add("show");
-              baitSublist.style.transform = "scaleY(1)";
-            });
-          } else {
-            baitSublist.classList.remove("show");
-            baitSublist.style.transform = "scaleY(0)";
+            loadSubbab(sub.file, bab.bab, subIndex, sub.title);
+            closeSidebar();
+            return;
           }
-        });
 
-        // Klik dua kali → Buka langsung
-        subTitle.addEventListener("dblclick", () => {
-          loadSubbab(sub.file, bab.bab, subIndex, sub.title);
-          closeSidebar();
+          // ---------- SINGLE CLICK ----------
+          clickTimer = setTimeout(async () => {
+            clickTimer = null;
+
+            const isVisible = baitSublist.classList.contains("show");
+
+            // Tutup semua preview lain
+            document.querySelectorAll(".bait-sublist.show").forEach((l) => {
+              l.classList.remove("show");
+              l.style.transform = "scaleY(0)";
+            });
+
+            if (!isVisible) {
+              await loadSubbabPreview(sub.file, baitSublist, bab, subIndex, sub);
+              requestAnimationFrame(() => {
+                baitSublist.classList.add("show");
+                baitSublist.style.transform = "scaleY(1)";
+              });
+            } else {
+              baitSublist.classList.remove("show");
+              baitSublist.style.transform = "scaleY(0)";
+            }
+          }, 230); // delay aman mendeteksi dblclick (200–250ms)
         });
       });
 
+      // =====================================
+      // 🔸 Toggle Bab Title
+      // =====================================
       const babTitle = babItem.querySelector(".bab-title");
 
       babTitle.addEventListener("click", (e) => {
@@ -142,9 +165,9 @@ export async function buildSidebar() {
   }
 }
 
-// =============================
-// 🪶 Preview Bait
-// =============================
+// =====================================
+// 📖 Preview Bait
+// =====================================
 async function loadSubbabPreview(file, subList, bab, subIndex, sub) {
   try {
     const res = await fetch(file);
@@ -157,21 +180,25 @@ async function loadSubbabPreview(file, subList, bab, subIndex, sub) {
         <li class="bait-item" data-id="${b.id}">
           <span class="bait-number">${b.id}.</span>
           <span class="bait-text">${(b.indo || "").slice(0, 40)}...</span>
-        </li>
-      `
+        </li>`
       )
       .join("");
 
     subList.querySelectorAll(".bait-item").forEach((li) => {
       li.addEventListener("click", async () => {
         await loadSubbab(sub.file, bab.bab, subIndex, sub.title);
+
         const el = document.querySelector(`.bait[data-id='${li.dataset.id}']`);
         if (el) {
-          document.querySelectorAll(".bait.highlighted").forEach((b) => b.classList.remove("highlighted"));
+          document
+            .querySelectorAll(".bait.highlighted")
+            .forEach((b) => b.classList.remove("highlighted"));
+
           el.scrollIntoView({ behavior: "smooth", block: "center" });
           requestAnimationFrame(() => el.classList.add("highlighted"));
           setTimeout(() => el.classList.remove("highlighted"), 2000);
         }
+
         closeSidebar();
       });
     });
@@ -181,9 +208,9 @@ async function loadSubbabPreview(file, subList, bab, subIndex, sub) {
   }
 }
 
-// =============================
-// 🎛 Kontrol Sidebar
-// =============================
+// =====================================
+// 🎛 Sidebar Controls
+// =====================================
 export const openSidebar = () => {
   animateOnce(() => {
     sidebar.classList.add("show");
@@ -198,9 +225,9 @@ export const closeSidebar = () => {
   });
 };
 
-// =============================
+// =====================================
 // 🌐 Event Global
-// =============================
+// =====================================
 menuToggle?.addEventListener("click", (e) => {
   e.stopPropagation();
   sidebar.classList.contains("show") ? closeSidebar() : openSidebar();
@@ -213,3 +240,26 @@ document.addEventListener("click", (e) => {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && sidebar.classList.contains("show")) closeSidebar();
 });
+
+// =====================================
+// scroll subbab
+// =====================================
+
+function scrollToSubbab(el) {
+  const sidebar = document.querySelector('.sidebar');
+  if (!sidebar) return;
+
+  const rect = el.getBoundingClientRect();
+  const sidebarRect = sidebar.getBoundingClientRect();
+
+  const isVisible =
+    rect.top >= sidebarRect.top &&
+    rect.bottom <= sidebarRect.bottom;
+
+  if (!isVisible) {
+    sidebar.scrollTo({
+      top: sidebar.scrollTop + rect.top - sidebarRect.top - 20,
+      behavior: "smooth"
+    });
+  }
+}
