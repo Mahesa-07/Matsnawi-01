@@ -1,0 +1,219 @@
+/* =======================================================
+✨ VARIABEL TEMA — Premium Elegan Biru
+======================================================= */
+
+/* 🌙 Dark Mode (default) */
+:root {
+  --bg: #0d0e10;
+  --panel: #141516;
+  --text: #e8e8e8;
+
+  --accent: #4da6ff;
+  --sub-judul: #66bfff;
+
+  --border: rgba(255, 255, 255, 0.06);
+  --fade: rgba(255, 255, 255, 0.015);
+
+  --card: #121314;
+  --card-light: #18191c;
+}
+
+/* ☀️ Light Mode */
+body.light {
+  --bg: #f5f5f5;
+  --panel: #ffffff;
+  --text: #202020;
+
+  --accent: #4da6ff;
+  --sub-judul: #4da6ff;
+
+  --border: rgba(0, 0, 0, 0.06);
+  --fade: rgba(0, 0, 0, 0.015);
+
+  --card: #ffffff;
+  --card-light: #fbfbfb;
+}
+
+/* =======================================================
+✨ LAYOUT UTAMA
+======================================================= */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", "Roboto", sans-serif;
+  line-height: 1.7;
+  transition: background 0.35s ease, color 0.35s ease;
+}
+
+main {
+  padding: 1.4rem 0.2rem 2.4rem;
+  max-width: 60rem;
+  margin: 0 auto;
+  transition: margin-left 0.28s ease;
+}
+
+.bait-container {
+  max-width: 50rem;
+  margin: 0 auto;
+  padding: 1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  line-height: 1.75;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+/* =======================================================
+🕊️ BAIT
+======================================================= */
+.bait {
+  padding: 0.6rem 0.4rem;
+  background: transparent;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.25s ease;
+}
+
+/* =======================================================
+📘 BAIT DENGAN SUBJUDUL
+======================================================= */
+.bait.with-title {
+  margin-top: 1.4rem;
+  padding: 1rem;
+  background: var(--card-light);
+  border: 1px solid var(--border);
+  border-radius: 0.9rem;
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.12);
+  transition: all 0.28s ease;
+}
+
+.bait.with-title:hover {
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+}
+
+.bait-title {
+  font-weight: 600;
+  font-size: 1.08rem;
+  color: var(--sub-judul);
+  letter-spacing: 0.2px;
+  margin-bottom: 0.45rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* =======================================================
+🌟 FOOTER BAIT
+======================================================= */
+.bait-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.35rem;
+}
+
+.bait-marker {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.35px;
+  opacity: 0.92;
+  user-select: none;
+}
+
+/* =======================================================
+🌐 TOMBOL BAHASA
+======================================================= */
+.toggle-lang-btn {
+  padding: 6px 10px !important;
+  font-size: 0.82rem;
+  font-weight: 500;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  border-radius: 12px;
+  border: 1px solid var(--border);
+
+  background: rgba(77, 166, 255, 0.08);
+  color: var(--accent) !important;
+
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.toggle-lang-btn:hover {
+  background: rgba(77, 166, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+/* =======================================================
+🔹 NAVIGASI — SELANJUTNYA & SEBELUMNYA
+======================================================= */
+/* Container Navigasi — tombol horizontal sejajar */
+.nav-buttons {
+  display: flex;
+  justify-content: space-between; /* tombol kiri-kanan sejajar */
+  align-items: center;
+  width: 100%; /* full width main */
+  max-width: 60rem; /* optional, supaya sejajar dengan main */
+  margin: 1.5rem auto; /* jarak dari container */
+  padding: 0 1rem; /* sedikit padding horizontal */
+  box-sizing: border-box;
+  gap: 0.5rem; /* optional */
+}
+
+.prev-sub-btn,
+.next-sub-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.7rem 1.6rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.35s ease;
+}
+
+.prev-sub-btn:hover,
+.next-sub-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+  transform: translateY(-2px);
+  box-shadow: 0 0 10px rgba(77, 166, 255, 0.35);
+}
+
+/* Light mode hover */
+body.light .next-sub-btn:hover,
+body.light .prev-sub-btn:hover {
+  background: var(--accent);
+  color: #fff;
+}
+/* =========================
+🌐 CORE — Variables, Reset, Utilities
+========================= */
+
+/* 🎨 Global Variables */
+:root {
+  --bg: #0e0e0e;
+  --text: #f5f5f5;
+  --accent: #ccc;
+  --border: rgba(255, 255, 255, 0.15);
+  --muted: #bbb;
+}
+
+/* ✨ Universal Motion */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 🔧 Common Focus */
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
