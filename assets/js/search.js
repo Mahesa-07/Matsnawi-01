@@ -1,4 +1,4 @@
-// 🔍 search.js — Fullscreen Overlay Search (ESModule Final)
+// 🔍 search.js — Fullscreen Overlay Search (FAST v2)
 import { showToast } from "./toast.js";
 import { loadSubbab } from "./subbab.js";
 
@@ -28,16 +28,57 @@ export function closeSearch() {
   searchResults.innerHTML = "";
 }
 
-// Klik input & ikon search → buka overlay
 searchInput?.addEventListener("focus", openSearch);
 closeSearchBtn?.addEventListener("click", closeSearch);
-document.querySelectorAll(".icon-search").forEach(icon => icon.addEventListener("click", openSearch));
+document.querySelectorAll(".icon-search").forEach(i => i.addEventListener("click", openSearch));
 
 // ======================
-// HELPER: Escape Regex
+// Escape Regex
 // ======================
 function escapeRegex(str) {
   return str.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+}
+
+// ======================
+// SUPER FAST CACHE LOADER
+// ======================
+async function loadGlobalCache() {
+  const indexRes = await fetch("./assets/data/index.json");
+  const index = await indexRes.json();
+
+  const tasks = [];
+
+  index.files.forEach((bab) => {
+    bab.subbabs.forEach((sub, i) => {
+      tasks.push({
+        bab,
+        sub,
+        subIndex: i,
+        promise: fetch(sub.file).then(r => r.json())
+      });
+    });
+  });
+
+  const results = await Promise.all(tasks.map(t => t.promise));
+
+  allBaitsCache = [];
+
+  results.forEach((json, i) => {
+    const t = tasks[i];
+    const arr = Array.isArray(json) ? json : json.baits || [];
+
+    arr.forEach((b, baitIndex) => {
+      allBaitsCache.push({
+        ...b,
+        babNum: t.bab.bab,
+        babTitle: t.bab.title,
+        subTitle: t.sub.title || "",
+        file: t.sub.file,
+        subIndex: t.subIndex,
+        baitIndex,
+      });
+    });
+  });
 }
 
 // ======================
@@ -53,75 +94,45 @@ searchField?.addEventListener("input", async () => {
   if (searching) return;
   searching = true;
 
-  // 🔹 Load data global jika belum ada
+  // FAST global cache load sekali saja
   if (!allBaitsCache) {
     try {
-      const indexRes = await fetch("./assets/data/index.json");
-      const index = await indexRes.json();
-      allBaitsCache = [];
-
-      for (const bab of index.files) {
-        for (let i = 0; i < bab.subbabs.length; i++) {
-          const sub = bab.subbabs[i];
-          const res = await fetch(sub.file);
-          const arr = await res.json();
-          const data = Array.isArray(arr) ? arr : arr.baits || [];
-
-          data.forEach((b, baitIndex) => {
-            allBaitsCache.push({
-              ...b,
-              babNum: bab.bab,
-              babTitle: bab.title,
-              subTitle: sub.title || "",
-              file: sub.file,
-              subIndex: i,
-              baitIndex,
-            });
-          });
-        }
-      }
+      await loadGlobalCache();
     } catch (err) {
-      console.error("❌ Gagal memuat data global:", err);
+      console.error(err);
       showToast("Gagal memuat data global.");
       searching = false;
       return;
     }
   }
 
-  // 🔹 Filter berdasarkan query
-  const filtered = allBaitsCache.filter((b) => {
-  const q = query.toLowerCase();
-  return (
+  // Filter cepat
+  const q = query;
+  const filtered = allBaitsCache.filter((b) =>
     (b.indo || "").toLowerCase().includes(q) ||
     (b.inggris || "").toLowerCase().includes(q) ||
-    b.id?.toString() === q ||             // 🔹 cari nomor id persis
-    b.id?.toString().includes(q)          // 🔹 atau sebagian angka id
+    b.id?.toString() === q ||
+    b.id?.toString().includes(q)
   );
-});
 
   if (!filtered.length) {
     searchResults.innerHTML = `
-      <div class="no-results">
-        ❌ Tidak ditemukan hasil untuk "<b>${query}</b>".
-      </div>`;
+      <div class="no-results">❌ Tidak ditemukan: "<b>${query}</b>"</div>`;
     searching = false;
     return;
   }
 
-  // 🔹 Render hasil
-  const queryRegex = new RegExp(`(${escapeRegex(query)})`, "gi");
+  // Render
+  const regex = new RegExp(`(${escapeRegex(query)})`, "gi");
+
   searchResults.innerHTML = filtered
     .map((b) => {
       const baitNum = b.id || b.baitIndex + 1;
-
-      // teks bait dengan highlight + nomor bait
       const text = (b.indo || b.inggris || "").replace(
-        queryRegex,
+        regex,
         `<span class="highlight">$1</span>`
       );
-      const combinedText = `<span class="bait-number">[${baitNum}]</span>${text}`;
 
-      // info compact
       const info = `${b.babTitle}${b.subTitle ? " › " + b.subTitle : ""} › Bait ${baitNum}`;
 
       return `
@@ -131,13 +142,13 @@ searchField?.addEventListener("input", async () => {
              data-sub="${b.subIndex}"
              data-title="${b.subTitle}"
              data-bait="${baitNum}">
-          <div class="text">${combinedText}</div>
+          <div class="text"><span class="bait-number">[${baitNum}]</span>${text}</div>
           <small>${info}</small>
         </div>`;
     })
     .join("");
 
-  // 🔹 Klik hasil → buka subbab & scroll ke bait + highlight smooth
+  // Klik hasil
   searchResults.querySelectorAll(".search-item").forEach((el) => {
     el.addEventListener("click", async () => {
       const file = el.dataset.file;
@@ -149,19 +160,11 @@ searchField?.addEventListener("input", async () => {
       showToast(`📖 Membuka ${title} (Bait ${baitId})...`);
       await loadSubbab(file, bab, subIndex, title);
 
-      if (!isNaN(baitId)) {
-        const baitEl = document.querySelector(`.bait[data-id='${baitId}']`);
-        if (baitEl) {
-          baitEl.scrollIntoView({ behavior: "smooth", block: "center" });
-
-          // highlight smooth
-          baitEl.classList.add("search-highlight");
-          setTimeout(() => {
-            baitEl.classList.remove("search-highlight");
-          }, 2000);
-        } else {
-          console.warn(`⚠️ Bait ${baitId} tidak ditemukan di DOM.`);
-        }
+      const baitEl = document.querySelector(`.bait[data-id='${baitId}']`);
+      if (baitEl) {
+        baitEl.scrollIntoView({ behavior: "smooth", block: "center" });
+        baitEl.classList.add("search-highlight");
+        setTimeout(() => baitEl.classList.remove("search-highlight"), 2000);
       }
 
       closeSearch();
