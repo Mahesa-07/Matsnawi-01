@@ -15,6 +15,8 @@
 @import url("./components/confirm-dialog.css");
 @import url("./components/toast.css");
 @import url("./components/footer.css");
+@import url("./components/baitAction.css");
+@import url("./components/dialog.css");
 
 @import url("./theme/light.css");
 @import url("./theme/dark.css");
