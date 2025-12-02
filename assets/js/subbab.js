@@ -75,7 +75,56 @@ export function addNextButtonIfEnd() {
 
   baitContainer.appendChild(nextBtn);
 }
+// =======================================================
+// 🔹 Tombol Sebelumnya
+// =======================================================
+export function addPrevButtonIfStart() {
+  const old = document.querySelector(".prev-sub-btn");
+  if (old) old.remove();
 
+  const prevBtn = document.createElement("button");
+  prevBtn.className = "prev-sub-btn";
+  prevBtn.innerHTML = "⟨⟨ Sebelumnya";
+
+  prevBtn.addEventListener("click", async () => {
+    try {
+      const { currentBab, currentSubbab } = getGlobals();
+      const res = await fetch("./assets/data/index.json");
+      const index = await res.json();
+
+      const babNowIndex = index.files.findIndex((b) => b.bab === currentBab);
+      const babNow = index.files[babNowIndex];
+      if (!babNow) return showToast("⚠️ Bab tidak ditemukan.");
+
+      const subs = babNow.subbabs || [];
+      const currentSubIndex = subs.findIndex((s) => s.file === currentSubbab);
+
+      // 🔸 Jika masih ada subbab sebelumnya
+      if (currentSubIndex > 0) {
+        const prevSub = subs[currentSubIndex - 1];
+        await loadSubbab(prevSub.file, babNow.bab, currentSubIndex - 1, prevSub.title);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
+
+      // 🔸 Tidak ada → mundur ke bab sebelumnya (jika ada)
+      const prevBab = index.files[babNowIndex - 1];
+      if (prevBab && prevBab.subbabs?.length > 0) {
+        const lastSub = prevBab.subbabs[prevBab.subbabs.length - 1];
+        await loadSubbab(lastSub.file, prevBab.bab, prevBab.subbabs.length - 1, lastSub.title);
+        showToast(`📖 Kembali ke ${prevBab.title || "Bab sebelumnya"}`);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        showToast("⬅️ Ini adalah awal dari karya ini.");
+      }
+    } catch (err) {
+      console.error("❌ Error prevSubbab:", err);
+      showToast("⚠️ Tidak bisa memuat subbab sebelumnya.");
+    }
+  });
+
+  baitContainer.appendChild(prevBtn);
+}
 // =======================================================
 // 🔹 Memuat Subbab
 // =======================================================
@@ -83,22 +132,48 @@ export async function loadSubbab(file, babIndex, subIndex, title) {
   if (!file) return;
 
   console.log("🔍 Memuat subbab:", file, babIndex, subIndex);
+
   const { currentSubbab, cacheSubbabs } = getGlobals();
 
-  // Cegah muat ulang sama
+  // 🚫 Jangan muat ulang subbab yang sama
   if (currentSubbab === file) {
     showToast(`⚠️ ${title} sudah aktif`);
     return;
   }
 
-  setGlobals({ currentBab: babIndex, currentSubbab: file });
+  // =====================================================
+  // 🟦 Ambil "lastRead" tetapi JANGAN override jika bukan subbab itu
+  // =====================================================
+  const lastRead = JSON.parse(localStorage.getItem("lastRead") || "null");
 
-  // 🔸 Cache
+  let realBabIndex = babIndex;
+  let realSubIndex = subIndex;
+
+  if (lastRead && lastRead.file === file) {
+    realBabIndex = lastRead.bab;
+    realSubIndex = lastRead.index;
+  }
+
+  // Set global state
+  setGlobals({ currentBab: realBabIndex, currentSubbab: file });
+
+  // =====================================================
+  // 🔹 Cache cepat
+  // =====================================================
   if (cacheSubbabs[file]) {
     const { data, offset } = cacheSubbabs[file];
     applySavedEdits(data);
+
     setGlobals({ baits: data, baitOffset: offset });
     renderBaits(data, offset);
+
+    // Simpan sebagai terakhir dibaca
+    localStorage.setItem("lastRead", JSON.stringify({
+      file,
+      bab: realBabIndex,
+      index: realSubIndex
+    }));
+
     showToast(`📖 ${title} (cached)`);
     return;
   }
@@ -112,32 +187,31 @@ export async function loadSubbab(file, babIndex, subIndex, title) {
     const index = await indexRes.json();
 
     for (const bab of index.files) {
-      if (bab.bab < babIndex) {
+      if (bab.bab < realBabIndex) {
         for (const s of bab.subbabs) {
           const r = await fetch(s.file);
           const arr = await r.json();
-          offset += Array.isArray(arr)
-            ? arr.length
-            : (arr.baits?.length || 0);
+          offset += Array.isArray(arr) ? arr.length : (arr.baits?.length || 0);
         }
-      } else if (bab.bab === babIndex) {
-        for (let i = 0; i < subIndex; i++) {
+      } else if (bab.bab === realBabIndex) {
+        for (let i = 0; i < realSubIndex; i++) {
           const r = await fetch(bab.subbabs[i].file);
           const arr = await r.json();
-          offset += Array.isArray(arr)
-            ? arr.length
-            : (arr.baits?.length || 0);
+          offset += Array.isArray(arr) ? arr.length : (arr.baits?.length || 0);
         }
         break;
       }
     }
+
+    console.log("Offset global:", offset);
 
     // =====================================================
     // 🔹 Ambil Data Subbab
     // =====================================================
     const res = await fetch(file);
     const json = await res.json();
-    const data = Array.isArray(json) ? json : json.baits || [];
+
+    const data = Array.isArray(json) ? json : (json.baits || []);
 
     if (!data.length) {
       baitContainer.innerHTML = `<div class="no-results">Subbab ini kosong.</div>`;
@@ -148,10 +222,21 @@ export async function loadSubbab(file, babIndex, subIndex, title) {
     applySavedEdits(data);
 
     cacheSubbabs[file] = { data, offset };
+
     setGlobals({ baits: data, baitOffset: offset });
+
+    // =====================================================
+    // 🔹 Simpan "terakhir dibaca"
+    // =====================================================
+    localStorage.setItem("lastRead", JSON.stringify({
+      file,
+      bab: realBabIndex,
+      index: realSubIndex
+    }));
 
     renderBaits(data, offset);
     showToast(`📖 ${title} dimuat`);
+
   } catch (err) {
     console.error("❌ Error loadSubbab:", err);
     showToast("⚠️ Gagal memuat subbab.");
@@ -194,7 +279,7 @@ export function renderBaits(baits = null, offset = 0) {
           ? `<div class="bait-eng">${engText}</div>`
           : `<div class="bait-indo">${indoText}</div>`;
 
-        const langLabel = isEng ? "Inggris" : "Indonesia";
+        const langLabel = isEng ? "EN" : "ID";
 
         return `
 <div class="bait" data-id="${baitId}" data-bait-index="${i}">
@@ -233,7 +318,8 @@ export function renderBaits(baits = null, offset = 0) {
 
     addBaitListeners();
     initLangToggleButtons();
-    addNextButtonIfEnd();
+    addPrevButtonIfStart();
+addNextButtonIfEnd();
 
     requestAnimationFrame(() => {
       baitContainer.classList.add("bait-enter-active");
