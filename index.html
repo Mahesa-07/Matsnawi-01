@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Matsnawi Jilid 1</title>
+  <link rel="stylesheet" href="./assets/css/main.css" />
+  <!-- 🔹 SVG Sprite Icons (Final) -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true" focusable="false">
+
+  <!-- 🌐 Language / Globe -->
+  <symbol id="icon-language" viewBox="0 0 24 24">
+    <path fill="currentColor"
+      d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2.2c1.9 0 3.7.6 5.1 1.7-.4.6-.9 1.4-1.4 2.4-1.1-.6-2.3-1-3.7-1.1V6.2zM6.2 8.6A8 8 0 0 1 11 6.2v2.4c-1.4.1-2.6.5-3.7 1.1-.5-1-.9-1.8-1.1-1.1zM4.2 12c0-.3 0-.6.1-.9.2.7.7 1.7 1.4 2.6.7.9 1.6 1.7 2.8 2.2v1.8A8 8 0 0 1 4.2 12zm3.6 6.5v-1.7c1.3-.5 2.3-1.3 3-2.3.7-1 1.1-2 .1-3.2.6-.1 1.2-.2 1.9-.2 1.4 0 2.7.4 3.8 1.1.4.6.9 1.3 1.4 2.2.2.4.4.9.6 1.3A8 8 0 0 1 7.8 18.5zM18.8 12c0 .3 0 .6-.1.9-.2-.7-.7-1.7-1.4-2.6-.7-.9-1.6-1.7-2.8-2.2V7.9c1.3.5 2.3 1.3 3 2.3.7 1 1.1 2 .1 3.2z"/>
+  </symbol>
+
+  <!-- 🔍 Search -->
+  <symbol id="icon-search" viewBox="0 0 24 24">
+    <circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.2" fill="none"
+            stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"
+          stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </symbol>
+
+  <!-- 📑 Bookmark (Outline) -->
+  <symbol id="icon-bookmark" viewBox="0 0 24 24">
+    <path fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"
+          d="M6.5 3h11v17l-5.5-3-5.5 3z"/>
+  </symbol>
+
+  <!-- 📘 Bookmark (Filled) -->
+  <symbol id="icon-bookmark-filled" viewBox="0 0 24 24">
+    <path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z" fill="currentColor"/>
+  </symbol>
+
+  <!-- ✏️ Edit -->
+  <symbol id="icon-edit" viewBox="0 0 24 24">
+    <path fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"
+          d="M3 17.25V21h3.75l11-11.03a2.12 2.12 0 0 0-3-3L3 17.25z"/>
+  </symbol>
+
+  <!-- 🗒️ Collapse / Expand -->
+  <symbol id="icon-collapse" viewBox="0 0 24 24">
+    <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
+          d="M8 10l4 4 4-4" />
+  </symbol>
+
+  <!-- 🌗 Sun -->
+  <symbol id="icon-sun" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.2" fill="none"/>
+    <path stroke="currentColor" stroke-width="1.2" stroke-linecap="round"
+          d="M12 2v2m0 16v2m10-10h-2M4 12H2m15.5 6.5l-1.5-1.5M7 7L5.5 5.5m12 0L17.5 7M6.5 17.5L5 19"/>
+  </symbol>
+
+  <!-- 🌙 Moon -->
+  <symbol id="icon-moon" viewBox="0 0 24 24">
+    <path fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"
+          d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+  </symbol>
+
+</svg>
+</head>
+
+<body>
+  <!-- 🧭 HEADER -->
+  <header>
+    <div class="left-header">
+      <button id="menuToggle" class="menu-btn" aria-label="Buka Sidebar">☰</button>
+      <h1>Matsnawi-01</h1>
+    </div>
+
+    <div class="header-center">
+      <div class="search-wrap" role="search">
+        <svg class="icon-search" aria-hidden="true">
+          <use href="#icon-search"></use>
+        </svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- 📚 SIDEBAR -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+
+      <div class="header-actions">
+        <!-- 📑 Bookmark -->
+        <button id="bookmark-toggle" class="icon-btn" title="Lihat Bookmark">
+          <svg width="20" height="20" aria-hidden="true">
+            <use href="#icon-bookmark"></use>
+          </svg>
+          <span>Bookmark</span>
+        </button>
+
+        <!-- 🌗 Ganti Tema -->
+        <button id="themeToggle" class="icon-btn" title="Ganti Tema">
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+            <use href="#icon-moon"></use>
+          </svg>
+          <span>Tema</span>
+        </button>
+      </div>
+
+      <!-- 🔸 Garis Pembatas & Judul -->
+      <div class="sidebar-divider"></div>
+      <h2 class="sidebar-title">Daftar Bab</h2>
+    </div>
+
+    <div id="baitList" class="sidebar-list"></div>
+  </aside>
+
+  <!-- 📖 KONTEN UTAMA -->
+<main id="content">
+  <div id="baitContainer" class="bait-container"></div>
+
+  <!-- 🔹 Tombol navigasi di luar container -->
+  <div class="nav-buttons">
+    <button class="prev-sub-btn">Sebelumnya</button>
+    <button class="next-sub-btn">Selanjutnya</button>
+  </div>
+</main>
+<!-- ✏️ PANEL EDIT — Bahasa Indonesia Saja -->
+<div id="edit-overlay"></div>
+
+<div id="edit-panel" class="edit-panel" aria-hidden="true">
+  <h3>Edit Bait</h3>
+
+  <label for="edit-indo">Terjemahan Indonesia:</label>
+
+  <!-- 🔹 Area editable -->
+  <div
+  id="edit-indo"
+  class="editable-box"
+  contenteditable="true"
+  data-placeholder="Masukkan terjemahan..."
+></div>
+
+<!-- 🔹 Mini Toolbar -->
+<div class="edit-toolbar">
+  <button class="tool-btn" data-cmd="italic" title="Italic"><i>I</i></button>
+  <button class="tool-btn" data-cmd="bold" title="Tebal"><b>B</b></button>
+  <button class="tool-btn" data-cmd="underline" title="Garis Bawah"><u>U</u></button>
+  <button class="tool-btn" data-cmd="removeFormat" title="Hapus Format">❌</button>
+</div>
+
+<!-- 🎨 Palet Warna -->
+<div class="color-palette">
+  <button class="color-btn" data-color="#e74c3c" style="background:#e74c3c"></button>
+  <button class="color-btn" data-color="#f1c40f" style="background:#f1c40f"></button>
+  <button class="color-btn" data-color="#2ecc71" style="background:#2ecc71"></button>
+  <button class="color-btn" data-color="#3498db" style="background:#3498db"></button>
+  <button class="color-btn" data-color="#9b59b6" style="background:#9b59b6"></button>
+  <button class="color-btn" data-color="#ffffff" style="background:#ffffff;border:1px solid #ccc"></button>
+</div>
+
+  <!-- 🔹 Tombol utama -->
+  <div class="edit-actions">
+    <button id="saveEditBtn" class="btn-save">💾 Simpan</button>
+    <button id="cancelEditBtn" class="btn-cancel">Batal</button>
+  </div>
+
+  <!-- 🔹 Tombol tambahan -->
+  <div class="edit-tools">
+    <button id="exportEditsBtn" class="btn-primary">📤 Ekspor</button>
+    <button id="importEditsBtn" class="btn-neutral">📥 Impor</button>
+    <button id="resetEditsBtn" class="btn-danger">♻️ Reset</button>
+  </div>
+</div>
+  <!-- 📑 PANEL BOOKMARK -->
+  <div id="bookmark-panel" class="bookmark-panel" aria-hidden="true">
+    <h3>📑 Daftar Bookmark</h3>
+    <div id="bookmark-list"></div>
+  </div>
+
+  <div id="bookmark-overlay"></div>
+
+  <!-- ⚠️ DIALOG KONFIRMASI -->
+  <div id="confirm-dialog" class="confirm-dialog" aria-hidden="true">
+    <div class="confirm-box">
+      <p>Hapus bookmark ini?</p>
+      <div class="confirm-actions">
+        <button id="cancelRemove" class="btn-cancel">Tidak</button>
+        <button id="confirmRemove" class="btn-confirm">Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔍 SEARCH OVERLAY -->
+  <div id="searchOverlay" class="search-overlay">
+    <div class="search-bar">
+      <input type="text" id="searchField" placeholder="Ketik kata kunci..." />
+      <button id="closeSearch" title="Tutup">✖</button>
+    </div>
+    <div id="searchResults" class="search-results"></div>
+  </div>
+
+  <!-- 🍞 TOAST AREA (dibuat otomatis oleh JS) -->
+<footer id="footer">
+  <p>
+    © 2025 <strong>Matsnawi Digital Edition  (masih dalam tahap pengembangan)</strong> — Disusun dan dikurasi oleh
+    <span class="accent">Mahesa-Ishak</span>.  
+    Berdasarkan karya agung <em>Masnawi-i Ma’nawi</em> karya Jalaluddin Rumi. 
+  </p>
+</footer>
+  <!-- ⚙️ SCRIPT UTAMA -->
+  <script type="module" src="./assets/js/main.js"></script>
+  
+</body>
+</html>
