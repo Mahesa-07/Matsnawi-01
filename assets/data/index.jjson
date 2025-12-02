@@ -1,0 +1,147 @@
+{
+  "files": [
+    {
+      "bab": 1,
+      "title": "Suling Bambu",
+      "description": "",
+      "subbabs": [
+        {
+          "title": "Suling Bambu",
+          "description": "bercerita tentang perpisahan ruh dengan asalnya",
+          "file": "./assets/data/bab1-sub1.json"
+        }
+      ]
+    },
+    {
+      "bab": 2,
+      "title": "Kisah tentang seorang raja yang jatuh cinta pada seorang pelayan wanita dan membelinya.",
+      "description": "",
+      "subbabs": [
+        {
+          "title": "Kisah tentang seorang raja yang jatuh cinta pada seorang pelayan wanita dan membelinya.",
+          "description": "",
+          "file": "./assets/data/bab2-sub1.json"
+        },
+        {
+          "title": "Bagaimana Raja menyadari kelemahan para tabib, dan bagaimana ia menghadapkan wajahnya kepada Tuhan lalu bermimpi berjumpa seorang Wali.",
+          "description": "",
+          "file": "./assets/data/bab2-sub2.json"
+        },
+        {
+          "title": "Memohon kepada Allah, yang adalah Penolong kita, Agar Dia sudi menolong kita menjaga kendali diri dalam tiap keadaan, Serta menjelaskan segala akibat buruk dan berbahaya dari ketidak-disiplinan jiwa.",
+          "description": "",
+          "file": "./assets/data/bab2-sub3.json"
+        },
+        {
+          "title": "Perjumpaan Sang Raja dengan Tabib Ilahi,Yang kedatangannya telah diisyaratkan dalam sebuah mimpi.",
+          "description": "",
+          "file": "./assets/data/bab2-sub4.json"
+        },
+        {
+          "title": "Kisah bagaimana Raja menghantar Sang Tabib ke sisi ranjang sang gadis yang sakit, Agar ia dapat melihat dengan mata kepala sendiri keadaannya.",
+          "description": "",
+          "file": "./assets/data/bab2-sub5.json"
+        },
+        {
+          "title": "Bagaimana Sang Tabib menuntut Raja untuk menyendiri bersama si gadis budak, demi menyingkap penyakitnya.",
+          "description": "",
+          "file": "./assets/data/bab2-sub6.json"
+        },
+        {
+          "title": "Kisah bagaimana Sang Wali (Tabib), setelah menyingkap (penyebab) penyakit itu, Memaparkannya di hadapan Sang Raja.",
+          "description": "",
+          "file": "./assets/data/bab2-sub7.json"
+        },
+        {
+          "title": "Kisah bagaimana Raja mengutus para utusan ke Samarkand untuk menjemput Sang Tukang Emas.",
+          "description": "",
+          "file": "./assets/data/bab2-sub8.json"
+        },
+        {
+          "title": "Penjelasan bahwa pembunuhan dan peracunan Tukang Emas itu (didorong) oleh Petunjuk Ilahi, bukan oleh hawa nafsu dan niat jahat.",
+          "description": "",
+          "file": "./assets/data/bab2-sub9.json"
+        }
+      ]
+    },
+    {
+      "bab": 3,
+      "title": "Kisah Penjual Sayur dan Burung Beo yang Menumpahkan Minyak",
+      "description": "",
+      "subbabs": [
+        {
+          "title": "Kisah Penjual Sayur dan Burung Beo yang Menumpahkan Minyak",
+          "description": "",
+          "file": "./assets/data/bab3-sub1.json"
+        }
+      ]
+    },
+    {
+      "bab": 4,
+      "title": "Kisah Raja Yahudi yang Buta Fanatisme",
+      "description": "",
+      "subbabs": [
+        {
+          "title": "Kisah Raja Yahudi yang Buta Fanatisme",
+          "description": "",
+          "file": "./assets/data/bab4-sub1.json"
+        },
+        {
+          "title": "Tentang bagaimana sang wazir memberikan petunjuk kepada raja untuk merancang suatu siasat.",
+          "description": "",
+          "file": "./assets/data/bab4-sub2.json"
+        },
+        {
+          "title": "Bagaimana umat Kristen membiarkan diri mereka ditipu oleh wazir.",
+          "description": "",
+          "file": "./assets/data/bab4-sub3.json"
+        },
+        {
+          "title": "Bagaimana Kaum Nasrani Mengikuti Sang Wazir",
+          "description": "",
+          "file": "./assets/data/bab4-sub4.json"
+        },
+        {
+          "title": "Kisah khalifah bertemu laila,",
+          "description": "",
+          "file": "./assets/data/bab4-sub5.json"
+        },
+                {
+          "title": "Penjelasan tentang Kedengkian Sang Wazir,",
+          "description": "",
+          "file": "./assets/data/bab4-sub6.json"
+        },
+        {
+          "title": "Bagaimana Orang yang Bijak di Kalangan Nasrani Memahami Tipu Daya Sang Wazir",
+          "description": "",
+          "file": "./assets/data/bab4-sub7.json"
+        },
+        {
+          "title": "Bagaimana Raja Mengirim Pesan Rahasia kepada Sang Wazir ",
+          "description": "",
+          "file": "./assets/data/bab4-sub8.json"
+        },
+        {
+          "title": "Penjelasan Dua Belas Suku Nasrani",
+          "description": "",
+          "file": "./assets/data/bab4-sub9.json"
+        },
+        {
+          "title": "Bagaimana wazir mengacaukan tata tertib Injil.",
+          "description": "",
+          "file": "./assets/data/bab4-sub10.json"
+        },
+        {
+          "title": "Menunjukkan bagaimana perbedaan ini terletak pada bentuk doktrin, bukan pada hakikat Jalan yang sesungguhnya.",
+          "description": "",
+          "file": "./assets/data/bab4-sub11.json"
+        },
+        {
+          "title": "Menjelaskan bagaimana wazir mengalami kehancuran (karena terlibat)  dalam rencana ini.",
+          "description": "",
+          "file": "./assets/data/bab4-sub12.json"
+        }
+      ]
+    }
+  ]
+}
