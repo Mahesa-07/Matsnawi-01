@@ -1,44 +1,47 @@
-[
-  {
-    "id": 644,
-    "title": "Bagaimana wazir membuat para pengikutnya kehilangan harapan akan kepergiannya dari pengasingan.",
-    "inggris": "",
-    "indo": "Sang wazir berseru dari dalam (tempat khalwatnya), \"Wahai para murid, ketahuilah dariku bahwa Isa-a.s telah menyampaikan pesan seperti ini kepadaku: pisahkanlah dirimu dari semua sahabat dan sanak kerabat.",
-    "description": ""
-  },
-  {
-    "id": 645,
-    "title": "",
-    "inggris": "",
-    "indo": "Hadapkan wajahmu ke dinding, duduklah sendiri, dan pilihlah untuk menyendiri bahkan dari keberadaan dirimu sendiri.’ ﴾645﴿",
-    "description": ""
-  },
-  {
-    "id": 646,
-    "title": "",
-    "inggris": "",
-    "indo": "Setelah ini, aku tidak lagi diberi izin untuk berbicara; setelah ini, aku tidak lagi memiliki urusan dengan kata-kata.",
-    "description": ""
-  },
-  {
-    "id": 647,
-    "title": "",
-    "inggris": "",
-    "indo": "Selamat tinggal, wahai sahabat-sahabatku! Aku telah mati (yakni secara spiritual); aku telah membawa semua bekalku ke langit keempat,",
-    "description": ""
-  },
-  {
-    "id": 648,
-    "title": "",
-    "inggris": "",
-    "indo": "Agar di bawah lingkaran api (dunia yang fana dan penuh kesedihan)  Aku tidak terbakar seperti kayu dalam derita dan kebinasaan,",
-    "description": ""
-  },
-  {
-    "id": 649,
-    "title": "",
-    "inggris": "",
-    "indo": "(Tetapi) agar mulai kini aku dapat duduk di sisi Isa di puncak langit keempat.”",
-    "description": ""
-  }
-]
+{
+  "title": "Bagaimana wazir membuat para murid kehilangan harapan bahwa ia akan meninggalkan pengasingannya.",
+  "data": [
+    {
+      "id": 643,
+      "inggris": "The vizier cried out from within, “O disciples, be this made known to you from me,",
+      "indo": "Wazir itu berseru dari dalam (khalwatnya): “Wahai para murid, hendaklah hal ini kalian ketahui dariku,”",
+      "description": "Seruan dari ‘dalam’ menandai suara batin pasca-khalwat; namun Rumi menyiapkan ironi—suara batin palsu bisa menyamar sebagai ilham. Isyarat filologis: *min dākhil* ≠ wahyu. (QS 6:112 tentang bisikan setan yang berhiaskan kata)."
+    },
+    {
+      "id": 644,
+      "inggris": "That Jesus hath given me a such-like message: ‘Be separated from all friends and kinsfolk.",
+      "indo": "bahwa ‘Isa telah menyampaikan kepadaku pesan semacam ini: ‘Berpisahlah dari seluruh sahabat dan kerabat.’",
+      "description": "Klaim pesan ‘Isa’ dipakai sebagai otoritas simbolik; pemutusan relasi disamarkan sebagai zuhud. Padahal tasawuf menimbang *farq* dan *jam‘*: berpisah demi menyatu, bukan memecah. (QS 57:27—rahbaniyyah yang diada-adakan)."
+    },
+    {
+      "id": 645,
+      "inggris": "645. Set thy face to the wall, sit alone, and choose to be secluded even from thine own existence.’",
+      "indo": "‘Hadapkan wajahmu ke dinding, duduklah sendiri, dan pilihlah berkhalwat bahkan dari keberadaanmu sendiri.’",
+      "description": "Bahasa fana’ dipakai secara ekstrem—‘dari keberadaanmu sendiri’—namun Rumi mengisyaratkan bahaya pseudo-fana’: pemutusan tanpa suluk dan adab. Fana’ sejati melahirkan baqa’. (QS 55:26–27)."
+    },
+    {
+      "id": 646,
+      "inggris": "After this there is no permission (for me) to speak; after this I have nothing to do with talk.",
+      "indo": "Setelah ini tidak ada izin bagiku untuk berbicara; setelah ini aku tidak lagi berurusan dengan kata-kata.",
+      "description": "Diam dijadikan tameng otoritas: ‘larangan bicara’ menutup kritik. Dalam filologi sufi, *ṣamt* adalah maqām, bukan klaim kekebalan. (HR. Bukhari: siapa beriman hendak berkata baik atau diam)."
+    },
+    {
+      "id": 647,
+      "inggris": "Farewell, O friends! I am dead: I have carried my belongings up to the Fourth Heaven,",
+      "indo": "Selamat tinggal, wahai sahabat-sahabat! Aku telah mati; aku telah mengangkat perbekalanku hingga Langit Keempat,",
+      "description": "‘Aku telah mati’—retorika *mawt qabla al-mawt*—dipakai sebagai deklarasi status. Penyebutan Langit Keempat merujuk kosmologi Mi‘raj ‘Isa, namun di sini berfungsi sebagai simbol klaim maqām. (QS 19:57)."
+    },
+    {
+      "id": 648,
+      "inggris": "In order that beneath the fiery sphere I may not burn like firewood in woe and perdition,",
+      "indo": "agar di bawah sfera api aku tidak terbakar seperti kayu bakar dalam kesengsaraan dan kebinasaan,",
+      "description": "Ketakutan akan ‘sfera api’ mencerminkan eskatologi simbolik; keselamatan dipersempit pada posisi kosmik, bukan etika ruhani. Rumi mengkritik spiritualisme geografis. (QS 24:35—cahaya, bukan tempat)."
+    },
+    {
+      "id": 649,
+      "inggris": "(But) henceforth may sit beside Jesus at the top of the Fourth Heaven.”",
+      "indo": "(Melainkan) mulai kini aku duduk di sisi ‘Isa di puncak Langit Keempat.”",
+      "description": "Puncak ironi: duduk ‘di sisi Isa’ sebagai legitimasi final. Nicholson-style: Rumi mengekspos klaim kedekatan simbolik yang menggantikan kebenaran akhlak. Kedekatan sejati diukur oleh *ittibā‘*, bukan lokasi. (QS 3:31)."
+    }
+  ]
+}
